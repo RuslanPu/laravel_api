@@ -12,9 +12,15 @@
 
                 <!-- Navigation Links -->
                 <div class="bg-dark hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if(Auth::user()->type == 2)
+                        <x-nav-link :href="route('adminDashboardShow')" :active="request()->routeIs('adminDashboardShow')">
+                            {{__('adminDashboard')}}
+                        </x-nav-link>
+                        <x-nav-link :href="route('apiServices')" :active="request()->routeIs('apiServices')">
+                            {{__('Service Api')}}
+                        </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 

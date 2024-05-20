@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'nakrutka_api' =>[
+        'uri' => env('API_NAKRUTKA_URI'),
+        'token' => env('APi_NAKRTUKA_TOKEN'),
+    ],
+
 ];

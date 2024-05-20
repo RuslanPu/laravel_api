@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Services\NakrutkaAPI;
 
-class NakrtutkaAPIController extends Controller
+class NakrutkaAPIController extends Controller
 {
     protected $apiService;
 
@@ -14,8 +14,16 @@ class NakrtutkaAPIController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function index()
+    public function balance()
     {
-        $response = $this->apiService->makeAPIRequest();
+        $response = $this->apiService->balance();
+        return $response;
+    }
+
+    public function listServices()
+    {
+        $response = $this->apiService->listServices();
+        $services = json_decode($response);
+        return view('admin.services', compact('services'));
     }
 }
