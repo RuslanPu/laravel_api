@@ -65,4 +65,10 @@ class NakrutkaAPI
         $response = $this->client->get($this->fullUrlRequest . '&action=' . $action .'&service=' . $service_id . '&quantity=' .$quantity . '&link=' . $linkProfile);
         return $response->getBody()->getContents();
     }
+
+    public function addOrderLikes($service_id, $quantity, $link)
+    {
+        $action = 'create';
+        $response = $this->client->get($this->fullUrlRequest . '&action=' . $action . '&service=' . $service_id . '&quantity=' . $quantity . '&link=' . $link);
+    }
 }
