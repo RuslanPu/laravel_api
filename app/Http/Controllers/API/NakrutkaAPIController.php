@@ -23,8 +23,7 @@ class NakrutkaAPIController extends Controller
 
     public function listServices()
     {
-        $response = $this->apiService->listServices();
-        $services = json_decode($response);
+        $services = ApiService::all();
         return view('admin.services', compact('services'));
     }
 
