@@ -79,9 +79,11 @@ Route::middleware('adminAuth')->prefix('admin')
         Route::get('/api/statusMultiOrder', [NakrutkaAPIController::class, 'statusMultiOrder']);
         Route::get('/api/addOrderFollowers', [NakrutkaAPIController::class, 'addOrderFollowers']);
         Route::get('/api/cancelOrder', [NakrutkaAPIController::class, 'cancelOrder']);
+        Route::get('/api/addAllServicesToDB', [NakrutkaAPIController::class, 'addAllServiceApiToDb']);
 
         Route::get('/services', [NakrutkaAPIController::class, 'listServices'])
         ->name('apiServices');
+
 
     });
 
