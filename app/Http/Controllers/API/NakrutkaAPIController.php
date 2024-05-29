@@ -4,7 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiService;
+use App\Models\PackageService;
 use App\Services\NakrutkaAPI;
+use Exception;
+
+
 
 class NakrutkaAPIController extends Controller
 {
@@ -86,6 +90,28 @@ class NakrutkaAPIController extends Controller
         }
 
         echo "All services from API successfully added to DB";
+    }
+
+    public function package()
+    {
+        try{
+
+            $package = PackageService::find(1);
+
+            $api_services_from_package = $package->apiServices();
+
+//            foreach ($api_services_from_package as $service) {
+//                echo  'id package  - ' . $service->package_id .  'id service  - ' . $service->service_id . ', cost package - ' .$service->pivot()->quantity . "<br>";
+//            }
+//
+//            $package->apiServices()->attach($service->id, ['quantity' => 500]);
+
+            echo "\n services from package get successfully! ";
+        } catch (Exception $e) {
+            echo "error create package , message : " . $e->getMessage();
+        }
+
+
     }
 
 

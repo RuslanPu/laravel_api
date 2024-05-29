@@ -84,6 +84,8 @@ Route::middleware('adminAuth')->prefix('admin')
         Route::get('/services', [NakrutkaAPIController::class, 'listServices'])
         ->name('apiServices');
 
+        Route::get('/package', [NakrutkaAPIController::class, 'package']);
+
 
     });
 

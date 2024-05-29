@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class ApiService extends Model
 {
+    use HasFactory;
+
     protected $table = 'api_services';
 
     protected $fillable = [
+        'id',
         'id_service',
         'name',
         'type',
@@ -24,4 +29,9 @@ class ApiService extends Model
         'queue_time_minutes',
         'cancel',
     ];
+
+    public function packages()
+    {
+        return $this->belongsToMany(PackageService::class);
+    }
 }
