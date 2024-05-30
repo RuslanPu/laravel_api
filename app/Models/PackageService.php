@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PackageService extends Model
 {
@@ -50,8 +51,29 @@ class PackageService extends Model
     }
 
 
-    public function apiServices()
+    public function allServices()
     {
-        return $this->belongsToMany('App\Models\ApiService', 'api_service_package_services', 'service_id', 'package_id');
+        return $servicesOfPackage = DB::table('api_service_package_services')->where('package_id', $this->id)->get();
     }
+
+    public function addServiceToPackage($serviceID)
+    {
+
+    }
+
+    public function addServicesToPackage(array $serviceID)
+    {
+
+    }
+
+    public function deleteServiceFromPackage($serviceID)
+    {
+
+    }
+
+    public function deleteServicesFromPackage(array $serviceID)
+    {
+
+    }
+
 }
