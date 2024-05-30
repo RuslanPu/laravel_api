@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Package\ServiceOfPackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -84,7 +85,13 @@ Route::middleware('adminAuth')->prefix('admin')
         Route::get('/services', [NakrutkaAPIController::class, 'listServices'])
         ->name('apiServices');
 
+        /**
+         * package controller crud
+         */
+
         Route::get('/package', [NakrutkaAPIController::class, 'package']);
+
+        Route::get('/package/add', [ServiceOfPackageController::class, 'index']);
 
 
     });
