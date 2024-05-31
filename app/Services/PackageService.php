@@ -18,6 +18,10 @@ class PackageService
         $this->repository->add($packageID, $serviceID, $quantity);
     }
 
+    public function deletePackageByID($packageID){
+        $this->repository->deletePackageByID($packageID);
+    }
+
     public function addServiceToPackage($serviceID)
     {
 

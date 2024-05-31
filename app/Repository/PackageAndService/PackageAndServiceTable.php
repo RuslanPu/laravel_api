@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 class PackageAndServiceTable implements PackageAndServiceInterface
 {
 
+    protected $table;
 
-    public function __construct()
+    public function __construct(DB $db)
     {
+        $this->table = $db::table('api_service_package_services');
     }
 
     function add($packageID, $serviceID, $quantity)
@@ -33,7 +35,7 @@ class PackageAndServiceTable implements PackageAndServiceInterface
 
     function deletePackageByID($packageID)
     {
-        // TODO: Implement deletePackageByID() method.
+        $this->table->where('package_id', '=', $packageID)->delete();
     }
 
     function getServicesByPackageId($packageID)

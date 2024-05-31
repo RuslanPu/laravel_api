@@ -20,10 +20,15 @@ class ServiceOfPackageController extends Controller
         $this->packageService->addPackage($packageID, $serviceID, $quantity);
     }
 
+    public function deletePackageByID($packageID)
+    {
+        $this->packageService->deletePackageByID($packageID);
+    }
+
     public function index(){
         try{
-            $this->add(1,1, 900);
-            echo "add package successfully!";
+            $this->deletePackageByID(1);
+            echo "deleted package successfully! ";
         } catch (Exception $e){
             return "Error , message : " . $e->getMessage();
         }
