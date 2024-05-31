@@ -23,23 +23,26 @@ class PackageAndServiceTable implements PackageAndServiceInterface
         ]);
     }
 
-    function addServiceToPackage($serviceID, $packageID)
+
+
+    function deleteServiceFromPackage($serviceID, $packageID):void
     {
-        // TODO: Implement addServiceToPackage() method.
+        $this->table->where('package_id', '=', $packageID)
+            ->where('service_id', '=', $serviceID)
+            ->delete();
     }
 
-    function deleteServiceFromPackage($serviceID, $packageID)
-    {
-        // TODO: Implement deleteServiceFromPackage() method.
-    }
-
-    function deletePackageByID($packageID)
+    function deletePackageByID($packageID):void
     {
         $this->table->where('package_id', '=', $packageID)->delete();
     }
 
-    function getServicesByPackageId($packageID)
+    function getServicesByPackageId($packageID): array
     {
-        // TODO: Implement getServicesByPackageId() method.
+        return $this->table
+            ->select('service_id')
+            ->where('package_id', '=', $packageID)
+            ->get()
+            ->toArray();
     }
 }

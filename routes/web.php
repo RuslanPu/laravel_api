@@ -86,12 +86,14 @@ Route::middleware('adminAuth')->prefix('admin')
         ->name('apiServices');
 
         /**
-         * package controller crud
+         * package of services controller crud
          */
 
         Route::get('/package', [NakrutkaAPIController::class, 'package']);
 
         Route::get('/package/add', [ServiceOfPackageController::class, 'index']);
+        Route::get('/package/delete/{id}', [ServiceOfPackageController::class, 'deletePackageByID']);
+        Route::get('/package/deleteService/{id}', [ServiceOfPackageController::class, 'deleteServiceFromPackage']);
 
 
     });

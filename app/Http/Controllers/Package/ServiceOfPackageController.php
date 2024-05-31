@@ -25,10 +25,29 @@ class ServiceOfPackageController extends Controller
         $this->packageService->deletePackageByID($packageID);
     }
 
+    public function addServiceToPackageID($serviceID, $packageID)
+    {
+        $this->packageService->addServiceToPackageID($serviceID, $packageID);
+    }
+
+    public function deleteServiceFromPackage($serviceID, $packageID): void
+    {
+        $this->packageService->deleteServiceFromPackage($serviceID, $packageID);
+    }
+
+    public function getServicesFromPackageID($packageID):array
+    {
+        return $this->packageService->getServicesFromPackageID($packageID);
+    }
+
+
+
     public function index(){
         try{
-            $this->deletePackageByID(1);
-            echo "deleted package successfully! ";
+            $services = $this->getServicesFromPackageID(1);
+            $this->deleteServiceFromPackage(2, 1);
+
+            var_dump($services);
         } catch (Exception $e){
             return "Error , message : " . $e->getMessage();
         }

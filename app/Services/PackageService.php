@@ -22,9 +22,14 @@ class PackageService
         $this->repository->deletePackageByID($packageID);
     }
 
-    public function addServiceToPackage($serviceID)
+    public function addService($serviceID, $packageID)
     {
+        $this->repository->addServiceToPackageID($serviceID, $packageID);
+    }
 
+    public function deleteServiceFromPackage($serviceID, $packageID):void
+    {
+        $this->repository->deleteServiceFromPackage($serviceID, $packageID);
     }
 
     public function addServicesToPackage(array $serviceID)
@@ -32,9 +37,9 @@ class PackageService
 
     }
 
-    public function deleteServiceFromPackage($serviceID)
+    public function getServicesFromPackageID($packageID):array
     {
-
+        return $this->repository->getServicesByPackageId($packageID);
     }
 
     public function deleteServicesFromPackage(array $serviceID)
