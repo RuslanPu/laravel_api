@@ -21,6 +21,8 @@
                             <textarea class="form-control" name="description" id="description" rows="3" required>{{ $package->description }}</textarea>
                         </div>
 
+                        <br>
+
                         <h6>Managers</h6>
 
                         <div class="mb-3">
@@ -46,7 +48,9 @@
                             </div>
                         @endforeach
 
-                        <x-primary-button>{{ __('Update') }}</x-primary-button>
+                        <div class="flex items-center justify-end mt-4">
+                            <x-primary-button>{{ __('Update') }}</x-primary-button>
+                        </div>
                     </form>
                 </div>
             </div>

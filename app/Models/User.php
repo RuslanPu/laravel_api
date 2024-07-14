@@ -4,7 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -77,9 +79,9 @@ class User extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    public function userPackages(): BelongsToMany
+    public function clientPackages(): BelongsToMany
     {
-        return $this->belongsToMany(PackageService::class, 'users_packages', 'user_id', 'package_id');
+        return $this->belongsToMany(PackageService::class, 'user_packages', 'user_id', 'package_id');
     }
 
     /**
@@ -87,7 +89,7 @@ class User extends Authenticatable
      */
     public function managerPackages(): BelongsToMany
     {
-        return $this->belongsToMany(PackageService::class, 'managers_packages', 'manager_id', 'package_id');
+        return $this->belongsToMany(PackageService::class, 'manager_packages', 'manager_id', 'package_id');
     }
 
     /**
@@ -96,6 +98,22 @@ class User extends Authenticatable
     public function clients(): BelongsToMany
     {
         return $this->belongsToMany(__CLASS__, 'manager_clients', 'manager_id', 'user_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function userPackage(): HasMany
+    {
+        return $this->hasMany(UserPackage::class, 'user_id', 'package_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function managerClient(): BelongsTo
+    {
+        return $this->belongsTo(ManagerClient::class, 'user_id');
     }
 
 }

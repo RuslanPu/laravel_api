@@ -13,7 +13,7 @@ class UserPackage extends Model
     protected $table = 'user_packages';
 
     public $fillable = [
-        'manager_packages_id',
+        'package_id',
         'user_id',
         'valid',
         'finish_date_time',

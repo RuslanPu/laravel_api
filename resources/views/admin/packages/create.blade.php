@@ -47,7 +47,9 @@
                             </div>
                         @endforeach
 
-                        <x-primary-button>{{ __('Create') }}</x-primary-button>
+                        <div class="flex items-center justify-end mt-4">
+                            <x-primary-button>{{ __('Create') }}</x-primary-button>
+                        </div>
                     </form>
                 </div>
             </div>

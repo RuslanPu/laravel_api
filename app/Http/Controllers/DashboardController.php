@@ -9,16 +9,19 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     //
-    public function adminDashboard() {
+    public function adminDashboard()
+    {
         $users = User::all();
         return view('admin/adminDashboard', compact('users'));
     }
 
-    public function managerDashboard() {
+    public function managerDashboard()
+    {
         return view('manager/managerDashboard');
     }
 
-    public function userDashboard() {
+    public function userDashboard()
+    {
         return view('user/userDashboard');
     }
 }

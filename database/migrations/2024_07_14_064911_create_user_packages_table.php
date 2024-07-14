@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('user_packages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('manager_packages_id')
-                ->constrained('manager_packages')
+            $table->foreignId('package_id')
+                ->constrained('package_services')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('valid');
+            $table->boolean('valid')->default(true);
             $table->date('finish_date_time')->nullable();
             $table->timestamps();
         });

@@ -23,7 +23,7 @@ class UserPackageFactory extends Factory
         $managerPackage = ManagerPackage::query()->inRandomOrder()->first();
 
         return [
-            'manager_packages_id' => $managerPackage?->id,
+            'package_id' => $managerPackage?->package_id,
             'user_id' => $user?->id,
             'valid' => true,
         ];

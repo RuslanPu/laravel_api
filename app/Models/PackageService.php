@@ -79,7 +79,7 @@ class PackageService extends Model
      *
      * @return HasManyThrough
      */
-    public function users(): HasManyThrough
+    public function clients(): HasManyThrough
     {
         return $this->hasManyThrough(
             User::class,               // Конечная модель, которую мы хотим получить

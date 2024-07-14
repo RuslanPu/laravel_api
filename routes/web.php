@@ -46,22 +46,12 @@ Route::middleware('managerAuth')->prefix('manager')
                 Route::get('list', [NakrutkaPackagesController::class, 'index'])->name('manager.packages');
             });
 
-        Route::prefix('users-packages')
-            ->group(function () {
-                Route::get('list', [ManagerPackageController::class, 'index'])->name('users-packages.list');
-                Route::get('create', [ManagerPackageController::class, 'create']);
-                Route::post('store', [ManagerPackageController::class, 'store']);
-                Route::get('edit/{userPackage}', [ManagerPackageController::class, 'edit']);
-                Route::put('update/{userPackage}', [ManagerPackageController::class, 'update']);
-                Route::delete('delete/{userPackage}', [ManagerPackageController::class, 'delete']);
-            });
-
         Route::prefix('client')
             ->group(function () {
                 Route::get('list', [ManagerUserController::class, 'index'])->name('manager-users.list');
                 Route::get('create', [ManagerUserController::class, 'create']);
-                Route::post('store', [ManagerUserController::class, 'store']);
-                #Route::get('edit/{client}', [ManagerUserController::class, 'edit']);
+                Route::post('store', [ManagerUserController::class, 'store'])->name('manager-users.store');
+                Route::get('edit/{client}', [ManagerUserController::class, 'edit']);
                 Route::put('update/{client}', [ManagerUserController::class, 'update']);
                 Route::delete('delete/{client}', [ManagerUserController::class, 'destroy']);
             });

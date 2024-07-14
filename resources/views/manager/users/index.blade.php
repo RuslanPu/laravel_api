@@ -10,39 +10,60 @@
             <div class="bg-dark dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1>List managers</h1>
-                    <a href="{{ url('admin/managers/create') }}">
+                    <a href="{{ url('manager/client/create') }}">
                         <x-primary-button>{{ __('Create') }}</x-primary-button>
                     </a>
 
                     <div>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">name</th>
-                                <th scope="col">email</th>
-                                <th scope="col">type</th>
-                            </tr>
-                            <tbody>
+                        @php
+                            $can = Auth()->user()->type === 1;
+                        @endphp
+                        <div class="container-sm mt-5">
                             @foreach($clients as $client)
-                                <tr>
-                                    <td>{{$client->id}}</td>
-                                    <td>{{$client->name}}</td>
-                                    <td>{{$client->email}}</td>
-                                    <td>{{$client->type}}</td>
-                                    <!-- <td><a href="{{ url('manager/client/edit'. $client->id) }}">Edit</a></td> -->
-                                    <td>
-                                        <form action="{{ url('manager/client/delete/'.$client->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this client?');">
+                                <div class="card mb-3">
+                            <span class="card-body">
+                                <h5 class="card-title">
+                                    ID:
+                                    <span class="badge text-bg-success">{{ $client->id }}</span>
+                                </h5>
+
+                                <p class="card-text">
+                                    Name:
+                                    <span class="badge text-bg-success">{{ $client->name }} </span>
+
+                                </p>
+                                <p class="card-text">
+                                    Description:
+                                    <span class="badge text-bg-success">{{ $client->email }}</span>
+                                </p>
+                                <p class="card-text">
+                                    Type:
+                                    <span class="badge text-bg-success">{{ $client->type }}</span>
+                                </p>
+
+                                <br>
+
+                                <h6>Packages</h6>
+                                <div class="m-3 flex-grow-1">
+                                    @foreach($client->clientPackages as $package)
+                                        <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{ $package->name }}</span>
+                                    @endforeach
+                                </div>
+
+                                @if($can)
+                                    <div class="d-flex justify-content-end">
+                                        <a class="btn btn-primary m-1" href="{{ url('manager/client/edit/'.$client->id) }}">Edit</a>
+
+                                        <form action="{{ url('manager/client/delete/'.$client->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this package?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit">Delete</button>
+                                            <button type="submit" class="m-1 btn btn-danger">Delete</button>
                                         </form>
-                                    </td>
-                                </tr>
+                                    </div>
+                                    @endif
+                                </div>
                             @endforeach
-                            </tbody>
-
-                        </table>
+                        </div>
                     </div>
 
                 </div>
