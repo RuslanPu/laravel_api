@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-dark dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 p-2">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
@@ -12,9 +12,12 @@
 
                 <!-- Navigation Links -->
                 <div class="bg-dark hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::user()->type == 2)
+                    @if(Auth::user()?->type == 2)
                         <x-nav-link :href="route('adminDashboardShow')" :active="request()->routeIs('adminDashboardShow')">
-                            {{__('adminDashboard')}}
+                            {{__('Main')}}
+                        </x-nav-link>
+                        <x-nav-link :href="route('packages-list')" :active="request()->routeIs('packages-list')">
+                            {{__('Packages')}}
                         </x-nav-link>
                         <x-nav-link :href="route('apiServices')" :active="request()->routeIs('apiServices')">
                             {{__('Service Api')}}

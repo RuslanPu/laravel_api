@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Cron;
 use App\Services\NakrutkaAPI;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
 class FetchBalanceCommand extends Command
@@ -25,12 +26,13 @@ class FetchBalanceCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws \JsonException|GuzzleException
      */
-    public function handle(NakrutkaAPI $apiService)
+    public function handle(NakrutkaAPI $apiService): void
     {
         info("Cron job running at == " . now());
         $response = $apiService->balance();
-        $balance = json_decode($response)->balance;
+        $balance = json_decode($response, false, 512, JSON_THROW_ON_ERROR)->balance;
         $cron = new Cron();
         $cron->name = 'fetch balance';
         $cron->value = $balance;

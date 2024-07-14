@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NakrutkaPackagesController;
 use App\Http\Controllers\Package\ServiceOfPackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,13 @@ Route::middleware('adminAuth')->prefix('admin')
     ->group(function(){
         Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])
             ->name('adminDashboardShow');
+
+        //Packages
+        Route::prefix('packages')
+            ->group(function () {
+                Route::get('/list', [NakrutkaPackagesController::class, 'index'])
+                    ->name('packages-list');
+            });
 
         /** CRUD managers */
         Route::get('/managers', [UserController::class, 'managers']);
@@ -88,13 +96,15 @@ Route::middleware('adminAuth')->prefix('admin')
         /**
          * package of services controller crud
          */
+        Route::prefix('package')
+        ->group(static function () {
+            Route::get('list', [NakrutkaPackagesController::class, 'index']);
+            Route::get('create', [NakrutkaPackagesController::class, 'create']);
 
-        Route::get('/package', [NakrutkaAPIController::class, 'package']);
-
-        Route::get('/package/add', [ServiceOfPackageController::class, 'index']);
-        Route::get('/package/delete/{id}', [ServiceOfPackageController::class, 'deletePackageByID']);
-        Route::get('/package/deleteService/{id}', [ServiceOfPackageController::class, 'deleteServiceFromPackage']);
-
+            Route::get('add', [ServiceOfPackageController::class, 'index']);
+            Route::get('delete/{id}', [ServiceOfPackageController::class, 'deletePackageByID']);
+            Route::get('deleteService/{id}', [ServiceOfPackageController::class, 'deleteServiceFromPackage']);
+        });
 
     });
 

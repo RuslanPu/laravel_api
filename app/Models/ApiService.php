@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class ApiService extends Model
@@ -14,7 +15,7 @@ class ApiService extends Model
 
     protected $fillable = [
         'id',
-        'id_service',
+        'service',
         'name',
         'type',
         'refill',
@@ -28,10 +29,17 @@ class ApiService extends Model
         'limit',
         'queue_time_minutes',
         'cancel',
+        'available'
     ];
 
-    public function packages()
+    /**
+     * Связь многие ко многим с PackageService
+     *
+     * @return BelongsToMany
+     */
+    public function packages(): BelongsToMany
     {
-        return $this->belongsToMany(PackageService::class);
+        return $this->belongsToMany(PackageService::class, 'package_services_api_services', 'service_id', 'package_id');
     }
+
 }

@@ -7,6 +7,9 @@ use App\Models\ApiService;
 use App\Models\PackageService;
 use App\Services\NakrutkaAPI;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Spatie\FlareClient\Api;
 
 
@@ -19,42 +22,62 @@ class NakrutkaAPIController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function balance()
+    /**
+     * @return string
+     */
+    public function balance(): string
     {
-        $response = $this->apiService->balance();
-        return $response;
+        return $this->apiService->balance();
     }
 
-    public function listServices()
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function listServices(): \Illuminate\Foundation\Application|View|Factory|Application
     {
         $services = ApiService::all();
         return view('admin.services', compact('services'));
     }
 
-    public function statusOrder()
+    /**
+     * @return mixed
+     * @throws \JsonException
+     */
+    public function statusOrder(): mixed
     {
         $orderID = '427580921';
         $response = $this->apiService->statusOrder($orderID);
-        return json_decode($response);
+        return json_decode($response, false, 512, JSON_THROW_ON_ERROR);
     }
 
-    public function statusMultiOrder()
+    /**
+     * @return mixed
+     */
+    public function statusMultiOrder(): mixed
     {
         $orderIDs = ['426882755', '426881817', '426596403', '426596256'];
         $response = $this->apiService->statusMultiOrder($orderIDs);
-        return json_decode($response);
+        return json_decode($response, false, 512, JSON_THROW_ON_ERROR);
     }
 
-    public function addOrderFollowers()
+    /**
+     * @return mixed
+     * @throws \JsonException
+     */
+    public function addOrderFollowers(): mixed
     {
         $service_id = '5';
         $quantity = '50';
         $linkProfile  = 'https://www.instagram.com/puninruslan/';
         $response = $this->apiService->addOrderFollowers($service_id, $quantity, $linkProfile);
-        return json_decode($response);
+        return json_decode($response, false, 512, JSON_THROW_ON_ERROR);
     }
     //{"order":"427580921","charge":0.045}
-    public function cancelOrder()
+
+    /**
+     * @return mixed
+     */
+    public function cancelOrder(): mixed
     {
         $order_id = '427580921';
         $response = $this->apiService->cancelOrder($order_id);
@@ -62,19 +85,27 @@ class NakrutkaAPIController extends Controller
 
     }
 
-    public function addAllServiceApiToDb()
+    /**
+     * @return void
+     * @throws \JsonException
+     */
+    public function addAllServiceApiToDb(): void
     {
         $response = $this->apiService->listServices();
-        $services = json_decode($response);
+        $services = json_decode($response, false, 512, JSON_THROW_ON_ERROR);
 
         foreach($services as $service){
             $apiService = new ApiService();
-            $apiService->id_service = $service->service;
+            $apiService->service = $service->service;
             $apiService->name = $service->name ?? '-';
             $apiService->type = $service->type ?? '-';
             if (isset($service->refill) && $service->refill != null) {
                 $apiService->refill = $service->refill;
-            } else $apiService->refill = '-';
+            } else {
+                {
+                    $apiService->refill = '-';
+                }
+            }
 
             $apiService->category = $service->category ?? '-';
             $apiService->rate = $service->rate ?? '-';

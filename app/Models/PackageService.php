@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 class PackageService extends Model
 {
@@ -17,63 +18,59 @@ class PackageService extends Model
         'description',
     ];
 
-    public string $name;
-    public string $description;
 
     /**
-     * @param string $name
-     * @param string $description
+     * Связь многие ко многим с ApiService
+     *
+     * @return BelongsToMany
      */
-//    public function __construct(string $name, string $description)
-//    {
-//        $this->name = $name;
-//        $this->description = $description;
-//    }
-
-    public function getName(): string
+    public function services(): BelongsToMany
     {
-        return $this->name;
+        return $this->belongsToMany(ApiService::class, 'package_services_api_services', 'package_id', 'service_id');
     }
 
-    public function setName(string $name): void
+    /**
+     * @return Collection
+     */
+    public function allServices(): Collection
     {
-        $this->name = $name;
+        return $this->services()->get();
     }
 
-    public function getDescription(): string
+    /**
+     * @param $serviceID
+     * @return void
+     */
+    public function addServiceToPackage($serviceID): void
     {
-        return $this->description;
+        $this->services()->attach($serviceID);
     }
 
-    public function setDescription(string $description): void
+    /**
+     * @param array $serviceIDs
+     * @return void
+     */
+    public function addServicesToPackage(array $serviceIDs): void
     {
-        $this->description = $description;
+        $this->services()->attach($serviceIDs);
     }
 
-
-    public function allServices()
+    /**
+     * @param $serviceID
+     * @return int
+     */
+    public function deleteServiceFromPackage($serviceID): int
     {
-        return $servicesOfPackage = DB::table('api_service_package_services')->where('package_id', $this->id)->get();
+        return $this->services()->detach($serviceID);
     }
 
-    public function addServiceToPackage($serviceID)
+    /**
+     * @param array $serviceIDs
+     * @return int
+     */
+    public function deleteServicesFromPackage(array $serviceIDs): int
     {
-
-    }
-
-    public function addServicesToPackage(array $serviceID)
-    {
-
-    }
-
-    public function deleteServiceFromPackage($serviceID)
-    {
-
-    }
-
-    public function deleteServicesFromPackage(array $serviceID)
-    {
-
+        return $this->services()->detach($serviceIDs);
     }
 
 }

@@ -40,8 +40,6 @@ class ServiceOfPackageController extends Controller
         return $this->packageService->getServicesFromPackageID($packageID);
     }
 
-
-
     public function index(){
         try{
             $services = $this->getServicesFromPackageID(1);

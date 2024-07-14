@@ -38,7 +38,7 @@
                                 @if($service->category == 3)
 
                                 <tr>
-                                    <td>{{isset($service->id_service) && $service->id_service != null ? $service->id_service : '-'}}</td>
+                                    <td>{{isset($service->service) && $service->service != null ? $service->service : '-'}}</td>
                                     <td>{{$service->name ?? '-'}}</td>
                                     <td>{{$service->type ?? '-'}}</td>
                                     <td>{{isset($service->refill) && $service->refill != null ? $service->refill : '-'}}</td>
@@ -84,7 +84,7 @@
                                 @if($service->category == 4)
 
                                     <tr>
-                                        <td>{{$service->id_service ?? '-'}}</td>
+                                        <td>{{$service->service ?? '-'}}</td>
                                         <td>{{$service->name ?? '-'}}</td>
                                         <td>{{$service->type ?? '-'}}</td>
                                         <td>{{isset($service->refill) && $service->refill != null ? $service->refill : '-'}}</td>
@@ -128,7 +128,7 @@
                                 @if($service->category == 6)
 
                                     <tr>
-                                        <td>{{$service->id_service ?? '-'}}</td>
+                                        <td>{{$service->service ?? '-'}}</td>
                                         <td>{{$service->name ?? '-'}}</td>
                                         <td>{{$service->type ?? '-'}}</td>
                                         <td>{{isset($service->refill) && $service->refill != null ? $service->refill : '-'}}</td>
@@ -172,7 +172,7 @@
                                 @if($service->category == 5)
 
                                     <tr>
-                                        <td>{{$service->id_service ?? '-'}}</td>
+                                        <td>{{$service->service ?? '-'}}</td>
                                         <td>{{$service->name ?? '-'}}</td>
                                         <td>{{$service->type ?? '-'}}</td>
                                         <td>{{isset($service->refill) && $service->refill != null ? $service->refill : '-'}}</td>
@@ -216,7 +216,7 @@
                                 @if($service->category == 7)
 
                                     <tr>
-                                        <td>{{$service->id_service ?? '-'}}</td>
+                                        <td>{{$service->service ?? '-'}}</td>
                                         <td>{{$service->name ?? '-'}}</td>
                                         <td>{{$service->type ?? '-'}}</td>
                                         <td>{{isset($service->refill) && $service->refill != null ? $service->refill : '-'}}</td>
