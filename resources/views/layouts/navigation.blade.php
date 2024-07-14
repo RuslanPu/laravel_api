@@ -12,18 +12,24 @@
 
                 <!-- Navigation Links -->
                 <div class="bg-dark hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    @if(Auth::user()?->type == 2)
-                        <x-nav-link :href="route('adminDashboardShow')" :active="request()->routeIs('adminDashboardShow')">
-                            {{__('Main')}}
-                        </x-nav-link>
-                        <x-nav-link :href="route('packages-list')" :active="request()->routeIs('packages-list')">
-                            {{__('Packages')}}
-                        </x-nav-link>
-                        <x-nav-link :href="route('apiServices')" :active="request()->routeIs('apiServices')">
-                            {{__('Service Api')}}
-                        </x-nav-link>
-                    @endif
-
+                    @switch(Auth::user()?->type)
+                        @case(2)
+                            <x-nav-link :href="route('adminDashboardShow')" :active="request()->routeIs('adminDashboardShow')">
+                                {{__('Main')}}
+                            </x-nav-link>
+                            <x-nav-link :href="route('packages.list')" :active="request()->routeIs('packages.list')">
+                                {{__('Packages')}}
+                            </x-nav-link>
+                            <x-nav-link :href="route('apiServices')" :active="request()->routeIs('apiServices')">
+                                {{__('Service Api')}}
+                            </x-nav-link>
+                        @break
+                        @case(1)
+                            <x-nav-link :href="route('packages.list')" :active="request()->routeIs('packages.list')">
+                                {{__('Packages')}}
+                            </x-nav-link>
+                        @break
+                    @endswitch
                 </div>
             </div>
 

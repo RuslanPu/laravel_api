@@ -11,15 +11,15 @@ class ManagerAuth
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth()->user()->type == 1 || Auth()->user()->type == 2) {
+        if (Auth()->user()->type === 1 || Auth()->user()->type === 2) {
             return $next($request);
-        } else {
-            return redirect()->route('login')->with('error', 'You do not have permission to access this page!');
         }
+
+        return redirect()->route('login')->with('error', 'You do not have permission to access this page!');
 
     }
 }

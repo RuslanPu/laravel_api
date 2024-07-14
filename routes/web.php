@@ -36,19 +36,18 @@ Route::middleware('managerAuth')->prefix('manager')
     ->group(function(){
         Route::get('/dashboard', [DashboardController::class, 'managerDashboard'])
             ->name('managerDashboardShow');
+
+        //Package of services controller crud
+        Route::prefix('packages')
+            ->group(static function () {
+                Route::get('list', [NakrutkaPackagesController::class, 'index'])->name('packages.list');
+            });
     });
 
 Route::middleware('adminAuth')->prefix('admin')
     ->group(function(){
         Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])
             ->name('adminDashboardShow');
-
-        //Packages
-        Route::prefix('packages')
-            ->group(function () {
-                Route::get('/list', [NakrutkaPackagesController::class, 'index'])
-                    ->name('packages-list');
-            });
 
         /** CRUD managers */
         Route::get('/managers', [UserController::class, 'managers']);
@@ -94,17 +93,17 @@ Route::middleware('adminAuth')->prefix('admin')
         ->name('apiServices');
 
         /**
-         * package of services controller crud
+         * Package of services controller crud
          */
-        Route::prefix('package')
-        ->group(static function () {
-            Route::get('list', [NakrutkaPackagesController::class, 'index']);
-            Route::get('create', [NakrutkaPackagesController::class, 'create']);
-
-            Route::get('add', [ServiceOfPackageController::class, 'index']);
-            Route::get('delete/{id}', [ServiceOfPackageController::class, 'deletePackageByID']);
-            Route::get('deleteService/{id}', [ServiceOfPackageController::class, 'deleteServiceFromPackage']);
-        });
+        Route::prefix('packages')
+            ->group(static function () {
+                Route::get('list', [NakrutkaPackagesController::class, 'index'])->name('packages.list');
+                Route::get('create', [NakrutkaPackagesController::class, 'create']);
+                Route::post('store', [NakrutkaPackagesController::class, 'store']);
+                Route::get('edit/{package}', [NakrutkaPackagesController::class, 'edit']);
+                Route::put('update/{package}', [NakrutkaPackagesController::class, 'update']);
+                Route::delete('delete/{package}', [NakrutkaPackagesController::class, 'destroy']);
+            });
 
     });
 

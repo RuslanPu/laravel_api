@@ -18,11 +18,14 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-dark dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <a href="{{ url('admin/package/create') }}">
+                        <a href="{{ url('admin/packages/create') }}">
                             <x-primary-button>{{ __('Create') }}</x-primary-button>
                         </a>
                         <div>
                             <div class="container-sm mt-5">
+                                @php
+                                $can = Auth()->user()->type === 2;
+                                @endphp
                                 @foreach($packages as $package)
                                     <div class="card mb-3">
                                         <div class="card-body">
@@ -46,18 +49,21 @@
                                             <h6>Services</h6>
                                             <div class="m-3 flex-grow-1">
                                                 @foreach($package->services as $service)
-                                                    <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{$service->name}}</span>
+                                                    <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{ $service->name }}</span>
                                                 @endforeach
                                             </div>
-                                            <div class="d-flex justify-content-end">
-                                                <a class="btn btn-primary m-1" href="{{ url('admin/users/'.$package->id.'/edit') }}">Edit</a>
 
-                                                <form action="{{ url('admin/packages/'.$package->id) }}" method="POST">
+                                            @if($can)
+                                            <div class="d-flex justify-content-end">
+                                                <a class="btn btn-primary m-1" href="{{ url('admin/packages/edit/'.$package->id) }}">Edit</a>
+
+                                                <form action="{{ url('admin/packages/delete/'.$package->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this package?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="m-1 btn btn-danger">Delete</button>
                                                 </form>
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
