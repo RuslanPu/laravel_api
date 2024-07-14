@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ManagerPackageController;
+use App\Http\Controllers\ManagerUserController;
 use App\Http\Controllers\NakrutkaPackagesController;
 use App\Http\Controllers\Package\ServiceOfPackageController;
 use App\Http\Controllers\ProfileController;
@@ -46,12 +48,22 @@ Route::middleware('managerAuth')->prefix('manager')
 
         Route::prefix('users-packages')
             ->group(function () {
-                Route::get('list', [UserPackageController::class, 'index'])->name('users-packages.list');
-                Route::get('create', [UserPackageController::class, 'create']);
-                Route::post('store', [UserPackageController::class, 'store']);
-                Route::get('edit/{userPackage}', [UserPackageController::class, 'edit']);
-                Route::put('update/{userPackage}', [UserPackageController::class, 'update']);
-                Route::delete('delete/{userPackage}', [UserPackageController::class, 'delete']);
+                Route::get('list', [ManagerPackageController::class, 'index'])->name('users-packages.list');
+                Route::get('create', [ManagerPackageController::class, 'create']);
+                Route::post('store', [ManagerPackageController::class, 'store']);
+                Route::get('edit/{userPackage}', [ManagerPackageController::class, 'edit']);
+                Route::put('update/{userPackage}', [ManagerPackageController::class, 'update']);
+                Route::delete('delete/{userPackage}', [ManagerPackageController::class, 'delete']);
+            });
+
+        Route::prefix('client')
+            ->group(function () {
+                Route::get('list', [ManagerUserController::class, 'index'])->name('manager-users.list');
+                Route::get('create', [ManagerUserController::class, 'create']);
+                Route::post('store', [ManagerUserController::class, 'store']);
+                #Route::get('edit/{client}', [ManagerUserController::class, 'edit']);
+                Route::put('update/{client}', [ManagerUserController::class, 'update']);
+                Route::delete('delete/{client}', [ManagerUserController::class, 'destroy']);
             });
     });
 

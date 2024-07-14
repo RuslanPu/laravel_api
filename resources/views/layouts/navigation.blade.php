@@ -28,6 +28,9 @@
                             <x-nav-link :href="route('manager.packages')" :active="request()->routeIs('manager.packages')">
                                 {{__('Packages')}}
                             </x-nav-link>
+                            <x-nav-link :href="route('manager-users.list')" :active="request()->routeIs('manager-users.list')">
+                                {{__('Clients')}}
+                            </x-nav-link>
                             <x-nav-link :href="route('users-packages.list')" :active="request()->routeIs('users-packages.list')">
                                 {{__('User packages')}}
                             </x-nav-link>

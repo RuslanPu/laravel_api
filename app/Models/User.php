@@ -66,6 +66,15 @@ class User extends Authenticatable
     }
 
     /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeClients($query): mixed
+    {
+        return $query->where('type', 0);
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function userPackages(): BelongsToMany
@@ -79,6 +88,14 @@ class User extends Authenticatable
     public function managerPackages(): BelongsToMany
     {
         return $this->belongsToMany(PackageService::class, 'managers_packages', 'manager_id', 'package_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function clients(): BelongsToMany
+    {
+        return $this->belongsToMany(__CLASS__, 'manager_clients', 'manager_id', 'user_id');
     }
 
 }

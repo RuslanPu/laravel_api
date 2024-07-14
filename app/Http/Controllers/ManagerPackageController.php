@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UsersPackages;
 use Illuminate\Http\Request;
 
-class UserPackageController extends Controller
+class ManagerPackageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -61,6 +60,6 @@ class UserPackageController extends Controller
      */
     public function destroy(PackageService $package): \Illuminate\Http\RedirectResponse
     {
-
+        return redirect()->route('manager-users.list')->with('success', 'Package deleted successfully.');
     }
 }

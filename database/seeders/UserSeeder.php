@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         $userObj->type = 0;
         $userObj->save();
 
+
         $managerObj = new User();
         $managerObj->name = 'Manager Rafi';
         $managerObj->email = 'managerRafi@gmail.com';
