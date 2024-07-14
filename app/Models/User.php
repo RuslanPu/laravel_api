@@ -45,4 +45,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function scopeAdmin($query)
+    {
+        return $query->where('type', 0)->first();
+    }
 }

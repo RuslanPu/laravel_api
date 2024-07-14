@@ -18,7 +18,6 @@ class PackageService extends Model
         'description',
     ];
 
-
     /**
      * Связь многие ко многим с ApiService
      *

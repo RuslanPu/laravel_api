@@ -3,9 +3,12 @@
 namespace App\Console\Commands\Nakrutka;
 
 use App\Models\ApiService;
+use App\Models\User;
+use App\Services\Errors\Error;
 use App\Services\NakrutkaAPI;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use JsonException;
 
 class SyncServices extends Command
 {
@@ -25,7 +28,7 @@ class SyncServices extends Command
 
     /**
      * Execute the console command.
-     * @throws \JsonException|GuzzleException
+     * @throws JsonException|GuzzleException
      */
     public function handle(NakrutkaAPI $apiService): void
     {
@@ -46,6 +49,12 @@ class SyncServices extends Command
             $this->info('Services synchronized successfully');
         } catch (\Exception $e) {
             $this->error('Error: ' . $e->getMessage());
+            Error::notificate(
+                'SyncServices',
+                $e->getMessage(),
+                $e->getTraceAsString(),
+                User::Admin()->email,
+            );
         }
     }
 }
