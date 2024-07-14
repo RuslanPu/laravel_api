@@ -27,6 +27,8 @@ class NakretkaPackagesStoreRequest extends FormRequest
             'description' => 'nullable|string',
             'services' => 'required|array',
             'services.*' => 'required|integer|exists:api_services,id',
+            'managers' => 'required|array',
+            'managers.*' => 'required|integer|exists:users,id',
         ];
     }
 }

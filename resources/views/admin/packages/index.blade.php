@@ -14,18 +14,19 @@
             </div>
 
             <br>
-
+            @php
+                $can = Auth()->user()->type === 2;
+            @endphp
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-dark dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
+                        @if($can)
                         <a href="{{ url('admin/packages/create') }}">
                             <x-primary-button>{{ __('Create') }}</x-primary-button>
                         </a>
+                        @endif
                         <div>
                             <div class="container-sm mt-5">
-                                @php
-                                $can = Auth()->user()->type === 2;
-                                @endphp
                                 @foreach($packages as $package)
                                     <div class="card mb-3">
                                         <div class="card-body">
@@ -43,6 +44,15 @@
                                                 Description:
                                                 <div class="alert alert-dark">{{ $package->description }}</div>
                                             </p>
+
+                                            <br>
+
+                                            <h6>Managers</h6>
+                                            <div class="m-3 flex-grow-1">
+                                                @foreach($package->managers as $manager)
+                                                    <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{ $manager->name }}</span>
+                                                @endforeach
+                                            </div>
 
                                             <br>
 

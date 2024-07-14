@@ -25,6 +25,9 @@ class NakretkaPackagesUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'services' => 'required|array',
+            'services.*' => 'required|integer|exists:api_services,id',
+            'managers' => 'required|array',
+            'managers.*' => 'required|integer|exists:api_services,id',
         ];
     }
 }

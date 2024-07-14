@@ -25,8 +25,11 @@
                             </x-nav-link>
                         @break
                         @case(1)
-                            <x-nav-link :href="route('packages.list')" :active="request()->routeIs('packages.list')">
+                            <x-nav-link :href="route('manager.packages')" :active="request()->routeIs('manager.packages')">
                                 {{__('Packages')}}
+                            </x-nav-link>
+                            <x-nav-link :href="route('users-packages.list')" :active="request()->routeIs('users-packages.list')">
+                                {{__('User packages')}}
                             </x-nav-link>
                         @break
                     @endswitch

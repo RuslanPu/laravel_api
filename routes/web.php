@@ -6,6 +6,7 @@ use App\Http\Controllers\NakrutkaPackagesController;
 use App\Http\Controllers\Package\ServiceOfPackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserPackageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,7 +41,17 @@ Route::middleware('managerAuth')->prefix('manager')
         //Package of services controller crud
         Route::prefix('packages')
             ->group(static function () {
-                Route::get('list', [NakrutkaPackagesController::class, 'index'])->name('packages.list');
+                Route::get('list', [NakrutkaPackagesController::class, 'index'])->name('manager.packages');
+            });
+
+        Route::prefix('users-packages')
+            ->group(function () {
+                Route::get('list', [UserPackageController::class, 'index'])->name('users-packages.list');
+                Route::get('create', [UserPackageController::class, 'create']);
+                Route::post('store', [UserPackageController::class, 'store']);
+                Route::get('edit/{userPackage}', [UserPackageController::class, 'edit']);
+                Route::put('update/{userPackage}', [UserPackageController::class, 'update']);
+                Route::delete('delete/{userPackage}', [UserPackageController::class, 'delete']);
             });
     });
 

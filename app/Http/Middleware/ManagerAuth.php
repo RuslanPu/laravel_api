@@ -15,7 +15,8 @@ class ManagerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth()->user()->type === 1 || Auth()->user()->type === 2) {
+        $user = Auth()->user();
+        if ($user && ($user->type === 1 || $user->type === 2)) {
             return $next($request);
         }
 
