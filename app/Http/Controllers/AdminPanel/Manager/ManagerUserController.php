@@ -1,18 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminPanel\Manager;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Manager\Clients\ClientsStoreRequest;
 use App\Http\Requests\Manager\Clients\ClientsUpdateRequest;
-use App\Models\ManagerClient;
 use App\Models\SocialAccountType;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
 
 class ManagerUserController extends Controller
 {

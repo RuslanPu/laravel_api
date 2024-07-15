@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminPanel\Admin\NakrutkaPackagesController;
+use App\Http\Controllers\AdminPanel\Manager\ManagerUserController;
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManagerPackageController;
-use App\Http\Controllers\ManagerUserController;
-use App\Http\Controllers\NakrutkaPackagesController;
-use App\Http\Controllers\Package\ServiceOfPackageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserPackageController;

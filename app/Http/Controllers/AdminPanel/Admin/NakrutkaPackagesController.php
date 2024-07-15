@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AdminPanel\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\NakrutkaPackages;
 use App\Http\Requests\Packages\NakretkaPackagesStoreRequest;
 use App\Http\Requests\Packages\NakretkaPackagesUpdateRequest;
 use App\Models\ApiService;
-use App\Models\ApiServiceCategory;
 use App\Models\PackageService;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class NakrutkaPackagesController extends Controller

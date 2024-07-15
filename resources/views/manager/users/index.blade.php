@@ -62,6 +62,14 @@
 
                                 @if($can)
                                     <div class="d-flex justify-content-end">
+                                        @if()
+                                        <form action="{{ url('manager/client/delete/'.$client->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="m-1 btn btn-success">Start</button>
+                                        </form>
+                                        @endif
+
                                         <a class="btn btn-primary m-1" href="{{ url('manager/client/edit/'.$client->id) }}">Edit</a>
 
                                         <form action="{{ url('manager/client/delete/'.$client->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this package?');">
