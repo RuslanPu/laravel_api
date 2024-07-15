@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_packages', function (Blueprint $table) {
+        Schema::create('social_accounts', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('package_id')
-                ->constrained('package_services')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->boolean('valid')->default(true);
-            $table->date('finish_date_time')->nullable();
+            $table->foreignId('social_account_type_id')
+                ->constrained('social_account_types')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->string('account_link');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_packages');
+        Schema::dropIfExists('social_accounts');
     }
 };

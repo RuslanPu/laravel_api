@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\ManagerPackage;
+use App\Models\SocialAccount;
+use App\Models\SocialAccountType;
 use App\Models\User;
-use App\Models\UserPackage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<UserPackage>
+ * @extends Factory<SocialAccount>
  */
-class UserPackageFactory extends Factory
+class SocialAccountFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,14 +21,12 @@ class UserPackageFactory extends Factory
     {
         /** @var User $user */
         $user = User::query()->where('type', 0)->inRandomOrder()->first();
-        $managerPackage = ManagerPackage::query()->inRandomOrder()->first();
-        $socialAccount = $user->accounts()->inRandomOrder()->first();
+        $socialAccountType = SocialAccountType::query()->inRandomOrder()->first();
 
         return [
-            'package_id' => $managerPackage?->package_id,
             'user_id' => $user?->id,
-            'social_account_id' => $socialAccount?->id,
-            'valid' => true,
+            'social_account_type_id' => $socialAccountType?->id,
+            'account_link' => $this->faker->url
         ];
     }
 }

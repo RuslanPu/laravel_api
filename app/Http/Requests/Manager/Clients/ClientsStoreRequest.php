@@ -28,6 +28,8 @@ class ClientsStoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'account_type' => 'required|exists:social_account_types,id',
+            'account_link' => 'required|url',
             'packages' => ['sometimes', 'array'],
             'packages.*' => ['sometimes', 'integer', 'exists:package_services,id']
         ];

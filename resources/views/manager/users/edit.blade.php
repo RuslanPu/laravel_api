@@ -40,6 +40,27 @@
 
                         <br>
 
+                        <h6>Account</h6>
+
+                        <div class="mt-4">
+                            <x-input-label for="account_type" :value="__('Account Type')" />
+                            <select class="form-select" name="account_type" id="account_type" onchange="toggleAccountLink()">
+                                <option value="">Select Account Type</option>
+                                @foreach ($accountTypes as $type)
+                                    <option value="{{ $type->id }}" {{ $client->account->social_account_type_id == $type->id ? 'selected' : '' }}>{{ $type->name_social_network }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('account_type')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-4" id="account-link-container" style="display:{{ $client->account ? 'block' : 'none' }};">
+                            <x-input-label for="account_link" :value="__('Account Link')" />
+                            <x-text-input id="account_link" class="block mt-1 w-full" type="url" name="account_link" value="{{ $client->account->account_link }}" />
+                            <x-input-error :messages="$errors->get('account_link')" class="mt-2" />
+                        </div>
+
+                        <br>
+
                         <h6>Packages</h6>
 
                         <div class="mb-3">
@@ -61,3 +82,16 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    function toggleAccountLink() {
+        var accountType = document.getElementById('account_type').value;
+        var accountLinkContainer = document.getElementById('account-link-container');
+
+        if (accountType) {
+            accountLinkContainer.style.display = 'block';
+        } else {
+            accountLinkContainer.style.display = 'none';
+        }
+    }
+</script>

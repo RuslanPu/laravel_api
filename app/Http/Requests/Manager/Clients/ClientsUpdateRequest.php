@@ -26,7 +26,9 @@ class ClientsUpdateRequest extends FormRequest
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'packages' => ['sometimes', 'array'],
-            'packages.*' => ['sometimes', 'integer', 'exists:package_services,id']
+            'packages.*' => ['sometimes', 'integer', 'exists:package_services,id'],
+            'account_type' => 'required|exists:social_account_types,id',
+            'account_link' => 'required|url',
         ];
 
         if ($this->client?->email === $this->input('email')) {

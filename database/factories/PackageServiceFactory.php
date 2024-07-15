@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\PackageService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PackageService>
+ * @extends Factory<PackageService>
  */
 class PackageServiceFactory extends Factory
 {

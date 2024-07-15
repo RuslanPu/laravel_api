@@ -15,6 +15,7 @@ class UserPackage extends Model
     public $fillable = [
         'package_id',
         'user_id',
+        'social_account_id',
         'valid',
         'finish_date_time',
     ];
@@ -33,6 +34,14 @@ class UserPackage extends Model
     public function package(): BelongsTo
     {
         return $this->belongsTo(PackageService::class, 'package_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(SocialAccount::class, 'social_account_id');
     }
 
 }

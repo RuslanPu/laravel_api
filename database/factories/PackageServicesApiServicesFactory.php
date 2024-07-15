@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\ApiService;
 use App\Models\PackageService;
+use App\Models\PackageServicesApiServices;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PackageServicesApiServices>
+ * @extends Factory<PackageServicesApiServices>
  */
 class PackageServicesApiServicesFactory extends Factory
 {

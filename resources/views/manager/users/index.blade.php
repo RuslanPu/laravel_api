@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-dark dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1>List managers</h1>
+                    <h1>List clients</h1>
                     <a href="{{ url('manager/client/create') }}">
                         <x-primary-button>{{ __('Create') }}</x-primary-button>
                     </a>
@@ -38,7 +38,17 @@
                                 </p>
                                 <p class="card-text">
                                     Type:
-                                    <span class="badge text-bg-success">{{ $client->type }}</span>
+                                    <span class="badge text-bg-success">{{ $client?->type }}</span>
+                                </p>
+
+                                <p class="card-text">
+                                    Account link:
+                                    <span class="badge text-bg-success">{{ $client?->account?->account_link }}</span>
+                                </p>
+
+                                <p class="card-text">
+                                    Account Type:
+                                    <span class="badge text-bg-success">{{ $client?->account?->type?->name_social_network }}</span>
                                 </p>
 
                                 <br>

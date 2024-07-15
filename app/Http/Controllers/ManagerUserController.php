@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Manager\Clients\ClientsStoreRequest;
 use App\Http\Requests\Manager\Clients\ClientsUpdateRequest;
 use App\Models\ManagerClient;
+use App\Models\SocialAccountType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,7 @@ class ManagerUserController extends Controller
     {
         /** @var User $manager */
         $manager = auth()->user();
-        $clients = $manager->clients()->get()->sortByDesc('updated_at');
+        $clients = $manager->clients()->with('account')->get()->sortByDesc('updated_at');
 
         return view('manager.users.index', compact('clients'));
     }
@@ -35,14 +36,15 @@ class ManagerUserController extends Controller
         /** @var User $manager */
         $manager = auth()->user();
         $packages = $manager->managerPackages()->get();
+        $accountTypes = SocialAccountType::all();
 
-        return view('manager.users.create', compact('packages'));
+        return view('manager.users.create', compact('packages', 'accountTypes'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ClientsStoreRequest $request)
+    public function store(ClientsStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
         DB::transaction(static function () use ($data) {
@@ -58,8 +60,15 @@ class ManagerUserController extends Controller
 
             $manager->clients()->attach($client->id);
 
+            //Create account
+            $account = $client->accounts()->create([
+                'account_link' => $data['account_link'],
+                'social_account_type_id' => $data['account_type']
+            ]);
+
+            //Sync packages
             if (isset($data['packages'])) {
-                $client->clientPackages()->attach($data['packages']);
+                $client->clientPackages()->attach($data['packages'], ['social_account_id' => $account->id]);
             }
         });
 
@@ -75,8 +84,9 @@ class ManagerUserController extends Controller
         $manager = auth()->user();
         $managerPackages = $manager->managerPackages()->get();
         $clientPackagesIds = $client->clientPackages()->pluck('package_services.id')->toArray();
+        $accountTypes = SocialAccountType::all();
 
-        return view('manager.users.edit', compact('client', 'managerPackages', 'clientPackagesIds'));
+        return view('manager.users.edit', compact('client', 'managerPackages', 'clientPackagesIds', 'accountTypes'));
     }
 
     /**
@@ -90,10 +100,24 @@ class ManagerUserController extends Controller
 
         DB::transaction(static function () use ($client, $data) {
             // Обновление данных клиента
+            /** @var User $user */
             $client->update([
                 'name' => $data['name'],
                 'email' => $data['email']
             ]);
+
+            // Обновление аккаунта клиента
+            if ($client->account) {
+                $client->account()->update([
+                    'social_account_type_id' => $data['account_type'],
+                    'account_link' => $data['account_link']
+                ]);
+            } else {
+                $client->account()->create([
+                    'social_account_type_id' => $data['account_type'],
+                    'account_link' => $data['account_link']
+                ]);
+            }
 
             // Обновление пакетов клиента
             if (isset($data['packages'])) {
