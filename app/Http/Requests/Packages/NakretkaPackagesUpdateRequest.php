@@ -26,7 +26,7 @@ class NakretkaPackagesUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'managers' => 'required|array',
-            'managers.*' => 'required|integer|exists:api_services,id',
+            'managers.*' => 'required|integer|exists:users,id',
             'services' => 'required|array',
             'services.*' => 'required|integer|exists:api_services,id',
             'quantities' => 'sometimes|array',

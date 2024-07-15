@@ -18,7 +18,7 @@ class NakrutkaPackagesController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.packages.index', ['packages' => PackageService::all()->sortByDesc('updated_at')]);
+        return view('admin.packages.index', ['packages' => PackageService::with(['services', 'packageApiServices'])->get()->sortByDesc('updated_at')]);
     }
 
     /**

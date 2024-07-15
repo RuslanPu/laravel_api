@@ -9,6 +9,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-dark dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ url('admin/packages/update', ['package' => $package->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -66,16 +75,16 @@
                                         @if($quantity = $packageService->quantity)
                                             <div class="mb-3">
                                                 <label for="quantities" class="form-label">Quantity:</label>
-                                                <input type="number" class="form-control" name="quantities[{{$packageService->id}}]" value="{{$quantity}}">
+                                                <input type="number" class="form-control" name="quantities[{{$packageService->service->id}}]" value="{{$quantity}}">
                                             </div>
                                         @endif
                                         @if ($comments = $packageService->comments)
                                             <div class="mb-3">
                                                 <label for="comments" class="form-label">Comments:</label>
-                                                <input type="text" class="form-control" name="comments[{{$packageService->id}}]" value="{{$comments}}">
+                                                <input type="text" class="form-control" name="comments[{{$packageService->service->id}}]" value="{{$comments}}">
                                             </div>
                                         @endif
-                                        <input type="hidden" name="services[]" value="{{$packageService->id}}">
+                                        <input type="hidden" name="services[]" value="{{$packageService->service->id}}">
 
                                         <button type="button" class="btn btn-danger" onclick="removeService(this)">Remove</button>
                                     </div>

@@ -58,8 +58,17 @@
 
                                             <h6>Services</h6>
                                             <div class="m-3 flex-grow-1">
-                                                @foreach($package->services as $service)
-                                                    <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{ $service->name }}</span>
+                                                @foreach($package->packageApiServices as $packageApiService)
+                                                    <div class="mb-2 badge bg-danger text-start p-2">
+                                                        <p class="mb-1"><strong>Name:</strong> {{ $packageApiService->service->name }}</p>
+                                                        <p class="mb-1"><strong>Type:</strong> {{ $packageApiService->service->type }}</p>
+                                                        @if($quantity = $packageApiService->quantity)
+                                                            <p class="mb-1"><strong>Quantity:</strong> {{$quantity}}</p>
+                                                        @endif
+                                                        @if ($comments = $packageApiService->comments)
+                                                            <p class="mb-1"><strong>Comments:</strong> {{$comments}}</p>
+                                                        @endif
+                                                    </div>
                                                 @endforeach
                                             </div>
 
