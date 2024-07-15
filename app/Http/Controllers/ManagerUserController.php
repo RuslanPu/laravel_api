@@ -138,6 +138,7 @@ class ManagerUserController extends Controller
         DB::transaction(function () use ($client) {
             $client->clientPackages()->detach();
             $client->managerClient()->delete();
+            $client->account()->delete();
             $client->delete();
         });
 
