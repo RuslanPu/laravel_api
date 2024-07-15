@@ -24,6 +24,8 @@ class PackageServicesApiServicesFactory extends Factory
         return [
             'package_id' => $package?->id,
             'service_id' => $services?->id,
+            'quantity' => $this->faker->numberBetween(1-1000),
+            'comments' => $this->faker->realText
         ];
     }
 }

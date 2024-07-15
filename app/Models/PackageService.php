@@ -30,6 +30,11 @@ class PackageService extends Model
         return $this->belongsToMany(ApiService::class, 'package_services_api_services', 'package_id', 'service_id');
     }
 
+    public function packageApiServices(): HasMany
+    {
+        return $this->hasMany(PackageServicesApiServices::class, 'package_id');
+    }
+
     /**
      * @return Collection
      */

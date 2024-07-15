@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Packages;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NakretkaPackagesUpdateRequest extends FormRequest
@@ -17,17 +18,21 @@ class NakretkaPackagesUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'services' => 'required|array',
-            'services.*' => 'required|integer|exists:api_services,id',
             'managers' => 'required|array',
             'managers.*' => 'required|integer|exists:api_services,id',
+            'services' => 'required|array',
+            'services.*' => 'required|integer|exists:api_services,id',
+            'quantities' => 'sometimes|array',
+            'quantities.*' => 'sometimes|integer',
+            'comments' => 'sometimes|array',
+            'comments.*' => 'sometimes|string',
         ];
     }
 }

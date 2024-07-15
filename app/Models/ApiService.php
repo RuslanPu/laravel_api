@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
@@ -40,6 +41,14 @@ class ApiService extends Model
     public function packages(): BelongsToMany
     {
         return $this->belongsToMany(PackageService::class, 'package_services_api_services', 'service_id', 'package_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function serviceCategory(): BelongsTo
+    {
+        return $this->belongsTo(ApiServiceCategory::class, 'category', 'id');
     }
 
 }

@@ -25,10 +25,14 @@ class NakretkaPackagesStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'services' => 'required|array',
-            'services.*' => 'required|integer|exists:api_services,id',
             'managers' => 'required|array',
             'managers.*' => 'required|integer|exists:users,id',
+            'services' => 'required|array',
+            'services.*' => 'required|integer|exists:api_services,id',
+            'quantities' => 'sometimes|array',
+            'quantities.*' => 'sometimes|integer',
+            'comments' => 'sometimes|array',
+            'comments.*' => 'sometimes|string',
         ];
     }
 }

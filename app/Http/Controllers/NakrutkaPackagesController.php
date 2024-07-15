@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Packages\NakretkaPackagesStoreRequest;
 use App\Http\Requests\Packages\NakretkaPackagesUpdateRequest;
 use App\Models\ApiService;
+use App\Models\ApiServiceCategory;
 use App\Models\PackageService;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,9 +26,15 @@ class NakrutkaPackagesController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
+        $services = ApiService::with('serviceCategory')->get();
+
+        $servicesByCategory = $services->groupBy(function ($service) {
+            return $service->serviceCategory->title;
+        });
+
         return view('admin.packages.create', [
             'managers' => User::Managers()->get(),
-            'servicesByType' => ApiService::all()->groupBy('type')]);
+            'servicesByCategory' => $servicesByCategory]);
     }
 
     /**
@@ -41,7 +48,10 @@ class NakrutkaPackagesController extends Controller
             $package = PackageService::create($data);
 
             foreach ($data['services'] as $serviceId) {
-                $package->services()->attach($serviceId);
+                $quantity = $data['quantities'][$serviceId] ?? null;
+                $comments = $data['comments'][$serviceId] ?? null;
+
+                $package->services()->attach($serviceId, compact('quantity', 'comments'));
             }
 
             foreach ($data['managers'] as $managerId) {
@@ -65,9 +75,17 @@ class NakrutkaPackagesController extends Controller
      */
     public function edit(PackageService $package): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $servicesByType = ApiService::all()->groupBy('type');
+        $services = ApiService::with('serviceCategory')->get();
+
+        $servicesByCategory = $services->groupBy(function ($service) {
+            return $service->serviceCategory->title;
+        });
+
         $managers = User::Managers()->get();
-        return view('admin.packages.edit', compact('package', 'servicesByType', 'managers'));
+
+        $packageServices = $package->packageApiServices()->with(['service', 'package'])->get();
+
+        return view('admin.packages.edit', compact('package', 'servicesByCategory', 'managers', 'packageServices'));
     }
 
     /**
@@ -80,7 +98,15 @@ class NakrutkaPackagesController extends Controller
             $package->update($data);
 
             // Синхронизация услуг
-            $package->services()->sync($data['services']);
+            $servicesData = [];
+            foreach ($data['services'] as $serviceId) {
+                $servicesData[$serviceId] = [
+                    'quantity' => $data['quantities'][$serviceId] ?? null,
+                    'comments' => $data['comments'][$serviceId] ?? null,
+                ];
+            }
+
+            $package->services()->sync($servicesData);
 
             // Синхронизация менеджеров
             $package->managers()->sync($data['managers']);
