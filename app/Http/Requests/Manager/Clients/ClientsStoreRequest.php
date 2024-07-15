@@ -30,8 +30,10 @@ class ClientsStoreRequest extends FormRequest
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'account_type' => 'required|exists:social_account_types,id',
             'account_link' => 'required|url',
+            'publication_links' => 'required|array',
+            'publication_links.*' => 'required|url|max:255',
             'packages' => ['sometimes', 'array'],
-            'packages.*' => ['sometimes', 'integer', 'exists:package_services,id']
+            'packages.*' => ['sometimes', 'integer', 'exists:package_services,id'],
         ];
     }
 }

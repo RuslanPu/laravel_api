@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminPanel\Manager;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Manager\Clients\ClientsStoreRequest;
 use App\Http\Requests\Manager\Clients\ClientsUpdateRequest;
+use App\Models\SocialAccount;
 use App\Models\SocialAccountType;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -44,7 +45,7 @@ class ManagerUserController extends Controller
     public function store(ClientsStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        DB::transaction(static function () use ($data) {
+        DB::transaction(function () use ($data) {
             /** @var User $client */
             $client = User::create([
                 'name' => $data['name'],
@@ -67,6 +68,9 @@ class ManagerUserController extends Controller
             if (isset($data['packages'])) {
                 $client->clientPackageService()->attach($data['packages'], ['social_account_id' => $account->id]);
             }
+
+            // Create publication links
+            $this->createPublicationLinks($data, $client, $account);
         });
 
         return redirect()->route('manager-users.list')->with('success', 'Client created successfully.');
@@ -95,7 +99,7 @@ class ManagerUserController extends Controller
     {
         $data = $request->validated();
 
-        DB::transaction(static function () use ($client, $data) {
+        DB::transaction(function () use ($client, $data) {
             // Обновление данных клиента
             /** @var User $user */
             $client->update([
@@ -104,17 +108,10 @@ class ManagerUserController extends Controller
             ]);
 
             // Обновление аккаунта клиента
-            if ($client->account) {
-                $client->account()->update([
-                    'social_account_type_id' => $data['account_type'],
-                    'account_link' => $data['account_link']
-                ]);
-            } else {
-                $client->account()->create([
-                    'social_account_type_id' => $data['account_type'],
-                    'account_link' => $data['account_link']
-                ]);
-            }
+            $account = $client->account()->updateOrCreate([
+                'social_account_type_id' => $data['account_type'],
+                'account_link' => $data['account_link']
+            ]);
 
             // Обновление пакетов клиента
             if (isset($data['packages'])) {
@@ -122,6 +119,9 @@ class ManagerUserController extends Controller
             } else {
                 $client->clientPackageService()->detach();
             }
+
+            // Create publication links
+            $this->createPublicationLinks($data, $client, $account);
         });
 
         return redirect()->route('manager-users.list')->with('success', 'Client updated successfully.');
@@ -140,6 +140,32 @@ class ManagerUserController extends Controller
         });
 
         return redirect()->route('manager-users.list')->with('success', 'Package deleted successfully.');
+    }
+
+    /**
+     * @param mixed $data
+     * @param User $client
+     * @param SocialAccount $account
+     * @return void
+     */
+    public function createPublicationLinks(mixed $data, User $client, SocialAccount $account): void
+    {
+        $client->socialAccountPublicationsLinks()->delete();
+        if (isset($data['publication_links'])) {
+            $client->clientPackages->map(function ($clientPackage) use ($account, $data, $client) {
+                $publicationLinksData = array_map(static function ($link) use ($clientPackage, $account, $client) {
+                    return [
+                        'user_package_id' => $clientPackage->id,
+                        'publication_link' => $link,
+                        'social_account_id' => $account->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }, $data['publication_links']);
+
+                $client->socialAccountPublicationsLinks()->insert($publicationLinksData);
+            });
+        }
     }
 
 }

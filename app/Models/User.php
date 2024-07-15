@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
 /**
  * Related
  * @property SocialAccount|null $account
+ * @property UserPackage $clientPackages
  */
 class User extends Authenticatable
 {

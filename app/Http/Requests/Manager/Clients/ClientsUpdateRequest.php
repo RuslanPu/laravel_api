@@ -29,6 +29,8 @@ class ClientsUpdateRequest extends FormRequest
             'packages.*' => ['sometimes', 'integer', 'exists:package_services,id'],
             'account_type' => 'required|exists:social_account_types,id',
             'account_link' => 'required|url',
+            'publication_links' => 'required|array',
+            'publication_links.*' => 'required|url|max:255',
         ];
 
         if ($this->client?->email === $this->input('email')) {

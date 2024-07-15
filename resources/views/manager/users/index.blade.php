@@ -51,6 +51,13 @@
                                     <span class="badge text-bg-success">{{ $client?->account?->type?->name_social_network }}</span>
                                 </p>
 
+                                <p class="card-text">
+                                    Publications links:
+                                    @foreach($client?->socialAccountPublicationsLinks as $publicationsLinks)
+                                        <span class="badge text-bg-success">{{ $publicationsLinks->publication_link }}</span>
+                                    @endforeach
+                                </p>
+
                                 <br>
 
                                 <h6>Packages</h6>
