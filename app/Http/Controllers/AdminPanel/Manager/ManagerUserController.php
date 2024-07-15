@@ -121,6 +121,7 @@ class ManagerUserController extends Controller
             }
 
             // Create publication links
+            $client->socialAccountPublicationsLinks()->delete();
             $this->createPublicationLinks($data, $client, $account);
         });
 
@@ -150,7 +151,6 @@ class ManagerUserController extends Controller
      */
     public function createPublicationLinks(mixed $data, User $client, SocialAccount $account): void
     {
-        $client->socialAccountPublicationsLinks()->delete();
         if (isset($data['publication_links'])) {
             $client->clientPackages->map(function ($clientPackage) use ($account, $data, $client) {
                 $publicationLinksData = array_map(static function ($link) use ($clientPackage, $account, $client) {
