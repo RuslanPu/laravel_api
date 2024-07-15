@@ -54,6 +54,12 @@ Route::middleware('managerAuth')->prefix('manager')
                 Route::get('edit/{client}', [ManagerUserController::class, 'edit']);
                 Route::put('update/{client}', [ManagerUserController::class, 'update']);
                 Route::delete('delete/{client}', [ManagerUserController::class, 'destroy']);
+
+                Route::prefix('package')
+                    ->group(function () {
+                        Route::put('{userPackage}/start', [NakrutkaServicesController::class, 'start']);
+                        Route::put('{userPackage}/stop', [NakrutkaServicesController::class, 'stop']);
+                    });
             });
     });
 
@@ -116,9 +122,6 @@ Route::middleware('adminAuth')->prefix('admin')
                 Route::get('edit/{package}', [NakrutkaPackagesController::class, 'edit']);
                 Route::put('update/{package}', [NakrutkaPackagesController::class, 'update']);
                 Route::delete('delete/{package}', [NakrutkaPackagesController::class, 'destroy']);
-
-                Route::put('{userPackage}/start', [NakrutkaServicesController::class, 'start']);
-                Route::put('{userPackage}/stop', [NakrutkaServicesController::class, 'start']);
             });
 
     });

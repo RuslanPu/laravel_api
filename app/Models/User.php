@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -135,6 +136,21 @@ class User extends Authenticatable
     public function account(): HasOne
     {
         return $this->hasOne(SocialAccount::class, 'user_id');
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function socialAccountPublicationsLinks(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            SocialAccountPublicationsLinks::class,
+            SocialAccount::class,
+            'user_id', // Foreign key on SocialAccount table...
+            'social_account_id', // Foreign key on SocialAccountPublicationsLinks table...
+            'id', // Local key on User table...
+            'id' // Local key on SocialAccount table...
+        );
     }
 
 }

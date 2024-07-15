@@ -21,7 +21,9 @@ class ProcessNakrutkaPackage implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(public UserPackage $userPackage)
-    {}
+    {
+        $this->onQueue('process-nakrutka-user-package-' . $userPackage->id);
+    }
 
     /**
      * Execute the job.
@@ -29,11 +31,7 @@ class ProcessNakrutkaPackage implements ShouldQueue
     public function handle(): void
     {
         try {
-            $api = new NakrutkaAPI(new Client());
-            ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage, $api)
-                ->afterCommit()
-                ->afterResponse()
-                ->onQueue('new_order' . $this->userPackage->id);
+            ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage);
         } catch (\Exception $e) {
             Error::notificate(
                 'ProcessNakrutkaPackage',

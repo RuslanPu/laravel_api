@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -23,8 +25,20 @@ class SocialAccount extends Model
         'account_link'
     ];
 
-    public function type(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    /**
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
     {
         return $this->belongsTo(SocialAccountType::class, 'social_account_type_id');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function publicationsLinks(): HasMany
+    {
+        return $this->hasMany(SocialAccountPublicationsLinks::class, 'social_account_id');
+    }
+
 }

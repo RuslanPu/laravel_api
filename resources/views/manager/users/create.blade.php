@@ -61,8 +61,20 @@
 
                         <br>
 
+                        <h6>Publication Links</h6>
+                        <div id="publication-links-container">
+                            <div class="mt-4 publication-link-group">
+                                <x-input-label for="publication_links[]" :value="__('Publication Link')" />
+                                <x-text-input id="publication_link_1" class="block mt-1 w-full" type="url" name="publication_links[]" />
+                                <x-input-error :messages="$errors->get('publication_links')" class="mt-2" />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mt-3 mb-6" onclick="addPublicationLink()">Add Publication Link</button>
+
+                        <br>
+
                         <div class="mb-3">
-                            <label for="packages">Packages:</label>
+                            <label for="packages">Change packages:</label>
                             <select multiple class="form-select" name="packages[]" id="packages">
                                 @foreach ($packages as $package)
                                     <option value="{{ $package->id }}">{{ $package->name }}</option>
@@ -79,7 +91,10 @@
         </div>
     </div>
 </x-app-layout>
+
 <script>
+    let publicationLinkCount = 1;
+
     function toggleAccountLink() {
         var accountType = document.getElementById('account_type').value;
         var accountLinkContainer = document.getElementById('account-link-container');
@@ -88,6 +103,27 @@
             accountLinkContainer.style.display = 'block';
         } else {
             accountLinkContainer.style.display = 'none';
+        }
+    }
+
+    function addPublicationLink() {
+        publicationLinkCount++;
+        const container = document.getElementById('publication-links-container');
+        const newLinkGroup = document.createElement('div');
+        newLinkGroup.classList.add('mt-4', 'publication-link-group');
+        newLinkGroup.innerHTML = `
+            <x-input-label for="publication_links[]" :value="__('Publication Link')" />
+            <x-text-input id="publication_link_${publicationLinkCount}" class="block mt-1 w-full" type="url" name="publication_links[]" />
+            <x-input-error :messages="$errors->get('publication_links')" class="mt-2" />
+            <button type="button" class="btn btn-danger mt-2" onclick="removePublicationLink(this)">Remove</button>
+        `;
+        container.appendChild(newLinkGroup);
+    }
+
+    function removePublicationLink(button) {
+        const container = document.getElementById('publication-links-container');
+        if (container.children.length > 1) {
+            button.parentElement.remove();
         }
     }
 </script>

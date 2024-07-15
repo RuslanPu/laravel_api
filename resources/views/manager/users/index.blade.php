@@ -67,7 +67,7 @@
                                                 <button type="submit" class="m-1 btn btn-success">Stop</button>
                                             </form>
                                             @else
-                                            <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                            <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/start' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="m-1 btn btn-success">Start</button>

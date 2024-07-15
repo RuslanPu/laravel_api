@@ -58,7 +58,7 @@ class ManagerUserController extends Controller
             $manager->clients()->attach($client->id);
 
             //Create account
-            $account = $client->accounts()->create([
+            $account = $client->account()->create([
                 'account_link' => $data['account_link'],
                 'social_account_type_id' => $data['account_type']
             ]);

@@ -46,17 +46,43 @@ class NakrutkaAPI
     }
 
     /**
-     * @param $action
-     * @param $service_id
-     * @param $quantity
-     * @param $linkProfile
-     * @param $comment
-     * @param $loginAuthorComment
-     * @return void
+     * Add a new order
+     *
+     * @param string $service_id
+     * @param int $quantity
+     * @param string $linkProfile
+     * @param string|null $comments
+     * @param string|null $loginAuthorComment
+     * @return string
+     * @throws GuzzleException
      */
-    public function addOrder($action, $service_id, $quantity, $linkProfile, $comment, $loginAuthorComment)
+    public function addOrder(
+        string      $service_id,
+        int         $quantity,
+        string      $link,
+        string|null $comments = null,
+        string|null $loginAuthorComment = null
+    ): string
     {
-        //get response {'order_id', 'charge'}
+        $action = 'create';
+
+        $params = '&action=' . $action . '&service=' . $service_id;
+        if ($quantity) {
+            $params .= '&quantity=' . $quantity;
+        }
+
+        if ($comments) {
+            $params .= '&comments=' . $comments;
+        }
+
+        if ($loginAuthorComment) {
+            $params .= '&username=' . $comments;
+        }
+
+        $params .= '&link=' . $link;
+
+        $response = $this->client->get($this->fullUrlRequest . $params);
+        return $response->getBody()->getContents();
     }
 
     /**
