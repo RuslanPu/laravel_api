@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $package_id
+ * @property int $user_id
+ * @property int $social_account_id
+ * @property boolean $valid
+ * @property string|null $finish_date_time
+ */
 class UserPackage extends Model
 {
     use HasFactory;

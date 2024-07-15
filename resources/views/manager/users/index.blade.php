@@ -55,20 +55,30 @@
 
                                 <h6>Packages</h6>
                                 <div class="m-3 flex-grow-1">
-                                    @foreach($client->clientPackages as $package)
-                                        <span class="mb-lg-1 badge rounded-pill text-bg-primary">{{ $package->name }}</span>
+
+                                    @foreach($client->clientPackages as $clientPackage)
+                                        <div class="mb-2 badge bg-gray-100  dark:bg-gray-900 text-start p-3">
+                                            <p class="mb-3"><strong>Name:</strong> {{ $clientPackage->package->name }}</p>
+
+                                            @if($clientPackage->valid)
+                                                <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                                @csrf
+                                                    @method('PUT')
+                                                <button type="submit" class="m-1 btn btn-success">Stop</button>
+                                            </form>
+                                            @else
+                                            <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="m-1 btn btn-success">Start</button>
+                                            </form>
+                                            @endif
+                                        </div>
                                     @endforeach
                                 </div>
 
                                 @if($can)
                                     <div class="d-flex justify-content-end">
-                                        @if()
-                                        <form action="{{ url('manager/client/delete/'.$client->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="m-1 btn btn-success">Start</button>
-                                        </form>
-                                        @endif
 
                                         <a class="btn btn-primary m-1" href="{{ url('manager/client/edit/'.$client->id) }}">Edit</a>
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminPanel\Admin\NakrutkaPackagesController;
 use App\Http\Controllers\AdminPanel\Manager\ManagerUserController;
+use App\Http\Controllers\AdminPanel\Manager\NakrutkaServicesController;
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManagerPackageController;
@@ -115,6 +116,9 @@ Route::middleware('adminAuth')->prefix('admin')
                 Route::get('edit/{package}', [NakrutkaPackagesController::class, 'edit']);
                 Route::put('update/{package}', [NakrutkaPackagesController::class, 'update']);
                 Route::delete('delete/{package}', [NakrutkaPackagesController::class, 'destroy']);
+
+                Route::put('{userPackage}/start', [NakrutkaServicesController::class, 'start']);
+                Route::put('{userPackage}/stop', [NakrutkaServicesController::class, 'start']);
             });
 
     });

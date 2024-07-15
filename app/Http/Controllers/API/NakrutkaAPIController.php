@@ -7,6 +7,7 @@ use App\Models\ApiService;
 use App\Models\PackageService;
 use App\Services\NakrutkaAPI;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -24,6 +25,7 @@ class NakrutkaAPIController extends Controller
 
     /**
      * @return string
+     * @throws GuzzleException
      */
     public function balance(): string
     {

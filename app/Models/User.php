@@ -82,9 +82,17 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasMany
+     */
+    public function clientPackages(): HasMany
+    {
+        return $this->hasMany(UserPackage::class, 'user_id');
+    }
+
+    /**
      * @return BelongsToMany
      */
-    public function clientPackages(): BelongsToMany
+    public function clientPackageService(): BelongsToMany
     {
         return $this->belongsToMany(PackageService::class, 'user_packages', 'user_id', 'package_id');
     }

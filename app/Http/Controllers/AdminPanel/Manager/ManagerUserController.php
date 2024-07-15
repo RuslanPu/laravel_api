@@ -65,7 +65,7 @@ class ManagerUserController extends Controller
 
             //Sync packages
             if (isset($data['packages'])) {
-                $client->clientPackages()->attach($data['packages'], ['social_account_id' => $account->id]);
+                $client->clientPackageService()->attach($data['packages'], ['social_account_id' => $account->id]);
             }
         });
 
@@ -80,7 +80,7 @@ class ManagerUserController extends Controller
         /** @var User $manager */
         $manager = auth()->user();
         $managerPackages = $manager->managerPackages()->get();
-        $clientPackagesIds = $client->clientPackages()->pluck('package_services.id')->toArray();
+        $clientPackagesIds = $client->clientPackageService()->pluck('package_services.id')->toArray();
         $accountTypes = SocialAccountType::all();
 
         return view('manager.users.edit', compact('client', 'managerPackages', 'clientPackagesIds', 'accountTypes'));
@@ -118,9 +118,9 @@ class ManagerUserController extends Controller
 
             // Обновление пакетов клиента
             if (isset($data['packages'])) {
-                $client->clientPackages()->sync($data['packages']);
+                $client->clientPackageService()->sync($data['packages']);
             } else {
-                $client->clientPackages()->detach();
+                $client->clientPackageService()->detach();
             }
         });
 
@@ -133,7 +133,7 @@ class ManagerUserController extends Controller
     public function destroy(User $client): RedirectResponse
     {
         DB::transaction(function () use ($client) {
-            $client->clientPackages()->detach();
+            $client->clientPackageService()->detach();
             $client->managerClient()->delete();
             $client->account()->delete();
             $client->delete();
