@@ -31,7 +31,9 @@ class ProcessNakrutkaPackage implements ShouldQueue
     public function handle(): void
     {
         try {
-            if ($this->userPackage->valid) {
+            if ($this->userPackage->package->active
+                && $this->userPackage->valid
+            ) {
                 $nakrutkaAPI = new NakrutkaAPI(new Client());
 
                 $this->userPackage

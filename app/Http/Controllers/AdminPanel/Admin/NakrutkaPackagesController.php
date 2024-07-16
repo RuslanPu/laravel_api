@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\AdminPanel\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\NakrutkaPackages;
 use App\Http\Requests\Packages\NakretkaPackagesStoreRequest;
 use App\Http\Requests\Packages\NakretkaPackagesUpdateRequest;
 use App\Models\ApiService;
@@ -18,7 +17,12 @@ class NakrutkaPackagesController extends Controller
      */
     public function index(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.packages.index', ['packages' => PackageService::with(['services', 'packageApiServices'])->get()->sortByDesc('updated_at')]);
+        return view('admin.packages.index', [
+            'packages' => PackageService::query()
+                ->where('active' , true)
+                ->with(['services', 'packageApiServices'])
+                ->get()
+                ->sortByDesc('updated_at')]);
     }
 
     /**
@@ -26,7 +30,9 @@ class NakrutkaPackagesController extends Controller
      */
     public function create(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $services = ApiService::with('serviceCategory')->get();
+        $services = ApiService::query()
+            ->where('active' , true)
+            ->with('serviceCategory')->get();
 
         $servicesByCategory = $services->groupBy(function ($service) {
             return $service->serviceCategory->title;
@@ -121,9 +127,9 @@ class NakrutkaPackagesController extends Controller
     public function destroy(PackageService $package): \Illuminate\Http\RedirectResponse
     {
         DB::transaction(static function () use ($package) {
-            $package->managers()->detach(); //Удаление всех связей с менеджерами
-            $package->services()->detach(); // Удаление всех связей с сервисами
-            $package->delete(); // Удаление самого пакета
+            //$package->managers()->detach(); //Удаление всех связей с менеджерами
+            //$package->services()->detach(); // Удаление всех связей с сервисами
+            $package->update(['active' => false]); // Удаление самого пакета
         });
 
         return redirect()->route('packages.list')->with('success', 'Package deleted successfully.');

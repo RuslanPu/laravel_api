@@ -92,11 +92,23 @@ class User extends Authenticatable
     }
 
     /**
+     * @return HasMany
+     */
+    public function activeClientPackages(): HasMany
+    {
+        return $this->hasMany(UserPackage::class, 'user_id')
+            ->whereHas('package', function ($query) {
+                $query->where('active', true);
+            });
+    }
+
+    /**
      * @return BelongsToMany
      */
     public function clientPackageService(): BelongsToMany
     {
-        return $this->belongsToMany(PackageService::class, 'user_packages', 'user_id', 'package_id');
+        return $this->belongsToMany(PackageService::class, 'user_packages', 'user_id', 'package_id')
+            ->where('active' , true);
     }
 
     /**
@@ -110,17 +122,18 @@ class User extends Authenticatable
     /**
      * @return BelongsToMany
      */
-    public function clients(): BelongsToMany
+    public function activeManagerPackages(): BelongsToMany
     {
-        return $this->belongsToMany(__CLASS__, 'manager_clients', 'manager_id', 'user_id');
+        return $this->belongsToMany(PackageService::class, 'manager_packages', 'manager_id', 'package_id')
+            ->where('active' , true);
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function userPackage(): HasMany
+    public function clients(): BelongsToMany
     {
-        return $this->hasMany(UserPackage::class, 'user_id', 'package_id');
+        return $this->belongsToMany(__CLASS__, 'manager_clients', 'manager_id', 'user_id');
     }
 
     /**
@@ -152,6 +165,14 @@ class User extends Authenticatable
             'id', // Local key on User table...
             'id' // Local key on SocialAccount table...
         );
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function nakrutkaOrders()
+    {
+        return $this->hasMany(NakrutkaOrders::class, 'user_id');
     }
 
 }

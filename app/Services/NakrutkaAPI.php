@@ -51,8 +51,8 @@ class NakrutkaAPI
      * Add a new order
      *
      * @param string $service_id
-     * @param int $quantity
-     * @param string $linkProfile
+     * @param int|null $quantity
+     * @param string $link
      * @param string|null $comments
      * @param string|null $loginAuthorComment
      * @return array

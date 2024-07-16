@@ -9,6 +9,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Collection;
 
+/**
+ * Columns
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property boolean $active
+ *
+ * Related
+ * @property ApiService $services
+ * @property PackageServicesApiServices $packageApiServices
+ * @property User $clients
+ * @property User $managers
+ * @property UserPackage $userPackages
+ * @property ManagerPackage $managerPackages
+ */
 class PackageService extends Model
 {
     use HasFactory;
@@ -18,6 +33,7 @@ class PackageService extends Model
     protected $fillable = [
         'name',
         'description',
+        'active'
     ];
 
     /**

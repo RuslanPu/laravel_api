@@ -63,7 +63,7 @@
                                 <h6>Packages</h6>
                                 <div class="m-3 flex-grow-1">
 
-                                    @foreach($client->clientPackages as $clientPackage)
+                                    @foreach($client->activeClientPackages as $clientPackage)
                                         <div class="mb-2 badge bg-gray-100  dark:bg-gray-900 text-start p-3">
                                             <p class="mb-3"><strong>Name:</strong> {{ $clientPackage->package->name }}</p>
 

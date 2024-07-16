@@ -21,7 +21,10 @@ class ManagerUserController extends Controller
     {
         /** @var User $manager */
         $manager = auth()->user();
-        $clients = $manager->clients()->with('account')->get()->sortByDesc('updated_at');
+        $clients = $manager->clients()
+            ->with('account')
+            ->get()
+            ->sortByDesc('updated_at');
 
         return view('manager.users.index', compact('clients'));
     }
@@ -33,7 +36,7 @@ class ManagerUserController extends Controller
     {
         /** @var User $manager */
         $manager = auth()->user();
-        $packages = $manager->managerPackages()->get();
+        $packages = $manager->activeManagerPackages()->get();
         $accountTypes = SocialAccountType::all();
 
         return view('manager.users.create', compact('packages', 'accountTypes'));
@@ -83,7 +86,7 @@ class ManagerUserController extends Controller
     {
         /** @var User $manager */
         $manager = auth()->user();
-        $managerPackages = $manager->managerPackages()->get();
+        $managerPackages = $manager->activeManagerPackages()->get();
         $clientPackagesIds = $client->clientPackageService()->pluck('package_services.id')->toArray();
         $accountTypes = SocialAccountType::all();
 
@@ -134,9 +137,12 @@ class ManagerUserController extends Controller
     public function destroy(User $client): RedirectResponse
     {
         DB::transaction(function () use ($client) {
-            $client->clientPackageService()->detach();
-            $client->managerClient()->delete();
-            $client->account()->delete();
+            $client->clientPackageService()->detach(); // Delete related with service
+            $client->managerClient()->delete(); //Delete related with manager
+            $client->nakrutkaOrders()->delete(); //Delete orders
+            $client->clientPackages()->delete(); //Delete user packages
+            $client->account->publicationsLinks()->delete(); //Delete publications links
+            $client->account()->delete(); //Delete account
             $client->delete();
         });
 
