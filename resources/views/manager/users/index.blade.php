@@ -84,11 +84,15 @@
                                                 </div>
                                             </div>
                                             @if($clientPackage->valid)
-                                                <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                                <div class="text-success m-2 p-2">
+                                                    <span class="badge text-bg-success">Valid until: {{ $clientPackage->finish_date_time ?? 'Unknown' }}</span>
+                                                </div>
+
+                                                <!-- <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
                                                     @csrf
                                                     @method('PUT')
                                                      <button type="submit" class="w-50 m-1 btn btn-danger">Stop</button>
-                                                </form>
+                                                </form> -->
                                             @else
                                                  <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/start' }}"
                                                        class="flex-column"

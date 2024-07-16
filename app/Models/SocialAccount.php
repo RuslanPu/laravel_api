@@ -20,6 +20,7 @@ class SocialAccount extends Model
     protected $table = 'social_accounts';
 
     protected $fillable = [
+        'id',
         'user_id',
         'social_account_type_id',
         'account_link'

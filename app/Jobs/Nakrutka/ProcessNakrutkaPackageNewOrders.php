@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserPackage;
 use App\Services\Errors\Error;
 use App\Services\NakrutkaAPI;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,8 +27,8 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
     public function __construct(
         public UserPackage $userPackage,
         public PackageServicesApiServices $packageServicesApiService,
-    ){
-        $this->afterCommit()->onQueue('process-new-order-user-package-' . $this->userPackage->id);
+    ) {
+        $this->afterCommit()->onQueue('new_nakrutka_order');
     }
 
     /**
@@ -35,77 +36,83 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->userPackage->package->active
-            && $this->userPackage->valid
-        ) {
-            $nakrutkaAPI = new NakrutkaAPI(new Client());
+        try {
+            $currentDateTime = Carbon::now();
+            $packageDateTime = Carbon::parse($this->userPackage->finish_date_time);
 
-            $link = null;
-            $service = $this->packageServicesApiService->service;
-
-            switch ($service->category) {
-                case ApiServiceCategory::CATEGORY_FOLLOWERS:
-                    $link = $this->userPackage->account->account_link;
-                    break;
-                case ApiServiceCategory::CATEGORY_VIEWS:
-                case ApiServiceCategory::CATEGORY_COMMENTS:
-                case ApiServiceCategory::CATEGORY_STATISTICS:
-                case ApiServiceCategory::CATEGORY_LIKES:
-                    $link = $this->userPackage->account->publicationsLinks()->inRandomOrder()->first()->publication_link;
-                    break;
-            }
-
-            $quantity = $this->calculateQuantity(
-                $this->packageServicesApiService->quantity,
-                $this->packageServicesApiService->service->min,
-                $this->packageServicesApiService->service->max,
-            );
-
-            $responseData = $nakrutkaAPI->addOrder(
-                $this->packageServicesApiService->service->service,
-                $quantity,
-                $link,
-                $this->packageServicesApiService->comments,
-                $this->packageServicesApiService->username
-            );
-
-            if ($responseData['successes']) {
-                $dataOrder = $responseData['data'];
-
-                NakrutkaOrders::create([
-                    'user_id' => $this->userPackage->user_id,
-                    'user_package_id' => $this->userPackage->id,
-                    'service' => $service->id,
-                    'order' => $dataOrder['order'],
-                    'quantity' => $quantity,
-                    'link' => $link,
-                    'charge' => $dataOrder['charge']
-                    //'remains',
-                    //'status',
-                    //'start_count',
-                    //'cancel_info',
-                    //'currency',
-                ]);
+            if ($currentDateTime->greaterThan($packageDateTime)) {
+                $this->userPackage->valid = false;
+                $this->userPackage->save();
             } else {
-                Error::notificate(
-                    'ProcessNakrutkaPackageNewOrders',
-                    $responseData['title'],
-                    $responseData['content'],
-                    User::Admin()->email,
-                );
-            }
-        }
+                if ($this->userPackage->package->active
+                    && $this->userPackage->valid
+                ) {
+                    $nakrutkaAPI = new NakrutkaAPI(new Client());
 
-        //try {
-//
-        //} catch (\Exception $e) {
-        //    Error::notificate(
-        //        'ProcessNakrutkaPackageNewOrders',
-        //        $e->getMessage(),
-        //        $e->getTraceAsString(),
-        //        User::Admin()->email,
-        //    );
-        //}
+                    $link = null;
+                    $service = $this->packageServicesApiService->service;
+
+                    switch ($service->category) {
+                        case ApiServiceCategory::CATEGORY_FOLLOWERS:
+                            $link = $this->userPackage->account->account_link;
+                            break;
+                        case ApiServiceCategory::CATEGORY_VIEWS:
+                        case ApiServiceCategory::CATEGORY_COMMENTS:
+                        case ApiServiceCategory::CATEGORY_STATISTICS:
+                        case ApiServiceCategory::CATEGORY_LIKES:
+                            $link = $this->userPackage->account->publicationsLinks()->inRandomOrder()->first()->publication_link;
+                            break;
+                    }
+
+                    $quantity = $this->calculateQuantity(
+                        $this->packageServicesApiService->quantity,
+                        $this->packageServicesApiService->service->min,
+                        $this->packageServicesApiService->service->max,
+                    );
+
+                    $responseData = $nakrutkaAPI->addOrder(
+                        $this->packageServicesApiService->service->service,
+                        $quantity,
+                        $link,
+                        $this->packageServicesApiService->comments,
+                        $this->packageServicesApiService->username
+                    );
+
+                    if ($responseData['successes']) {
+                        $dataOrder = $responseData['data'];
+
+                        NakrutkaOrders::create([
+                            'user_id' => $this->userPackage->user_id,
+                            'user_package_id' => $this->userPackage->id,
+                            'service' => $service->id,
+                            'order' => $dataOrder['order'],
+                            'quantity' => $quantity,
+                            'link' => $link,
+                            'charge' => $dataOrder['charge']
+                            //'remains',
+                            //'status',
+                            //'start_count',
+                            //'cancel_info',
+                            //'currency',
+                        ]);
+                    } else {
+                        Error::notificate(
+                            'ProcessNakrutkaPackageNewOrders',
+                            $responseData['title'],
+                            $responseData['content'],
+                            User::Admin()->email,
+                        );
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Error::notificate(
+                'ProcessNakrutkaPackageNewOrders',
+                $e->getMessage(),
+                $e->getTraceAsString(),
+                User::Admin()->email,
+            );
+        }
     }
 
 
@@ -138,6 +145,6 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
      */
     public function restart(): void
     {
-        self::dispatch($this->userPackage)->delay(86400); //1day 86400
+        self::dispatch($this->userPackage)->delay(60); //1day 86400
     }
 }

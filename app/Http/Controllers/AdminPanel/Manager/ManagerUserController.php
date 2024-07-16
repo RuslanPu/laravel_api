@@ -116,9 +116,14 @@ class ManagerUserController extends Controller
                 'account_link' => $data['account_link']
             ]);
 
+
             // Обновление пакетов клиента
             if (isset($data['packages'])) {
-                $client->clientPackageService()->sync($data['packages']);
+                $pivotData = [];
+                foreach ($data['packages'] as $packageId) {
+                    $pivotData[$packageId] = ['social_account_id' => $account->id];
+                }
+                $client->clientPackageService()->sync($pivotData);
             } else {
                 $client->clientPackageService()->detach();
             }
