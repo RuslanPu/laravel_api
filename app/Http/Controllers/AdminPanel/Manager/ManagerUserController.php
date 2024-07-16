@@ -144,7 +144,7 @@ class ManagerUserController extends Controller
         DB::transaction(function () use ($client) {
             $client->clientPackageService()->detach(); // Delete related with service
             $client->managerClient()->delete(); //Delete related with manager
-            $client->nakrutkaOrders()->delete(); //Delete orders
+            //$client->nakrutkaOrders()->delete(); //Delete orders
             $client->clientPackages()->delete(); //Delete user packages
             $client->account->publicationsLinks()->delete(); //Delete publications links
             $client->account()->delete(); //Delete account
@@ -163,7 +163,7 @@ class ManagerUserController extends Controller
     public function createPublicationLinks(mixed $data, User $client, SocialAccount $account): void
     {
         if (isset($data['publication_links'])) {
-            $client->clientPackages->map(function ($clientPackage) use ($account, $data, $client) {
+            $client->clientPackages->map(function ($clientPackage) use ($account, $client, $data) {
                 $publicationLinksData = array_map(static function ($link) use ($clientPackage, $account, $client) {
                     return [
                         'user_package_id' => $clientPackage->id,

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminPanel\Admin\NakrutkaPackagesController;
 use App\Http\Controllers\AdminPanel\Manager\ManagerUserController;
 use App\Http\Controllers\AdminPanel\Manager\NakrutkaServicesController;
+use App\Http\Controllers\AdminPanel\User\StatisticController;
 use App\Http\Controllers\API\NakrutkaAPIController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ManagerPackageController;
@@ -31,8 +32,19 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 /** General user routes */
-Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'userDashboard'])
+Route::middleware(['auth', 'verified'])
+    ->get('/dashboard', [DashboardController::class, 'userDashboard'])
     ->name('dashboard');
+
+/** Client routes */
+Route::middleware('clientAuth')
+    ->prefix('client')
+    ->group(function () {
+        Route::prefix('statistic')
+            ->group(function () {
+            Route::get('index', [StatisticController::class, 'index'])->name('client.statistic.index');
+        });
+    });
 
 /** Manager routes */
 Route::middleware('managerAuth')->prefix('manager')

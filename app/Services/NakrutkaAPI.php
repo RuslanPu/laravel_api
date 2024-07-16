@@ -125,14 +125,35 @@ class NakrutkaAPI
 
     /**
      * @param array $orderIDs
-     * @return string
+     * @return array
      * @throws GuzzleException
      */
-    public function statusMultiOrder(array $orderIDs): string
+    public function statusMultiOrder(array $orderIDs): array
     {
-        $action = 'status';
-        $response = $this->client->get($this->fullUrlRequest . '&action=' . $action .'&orders=' .implode(',', $orderIDs));
-        return $response->getBody()->getContents();
+        try {
+            $action = 'status';
+
+            $response = $this->client->get($this->fullUrlRequest . '&action=' . $action .'&orders=' .implode(',', $orderIDs));
+
+            if ($response->getStatusCode() !== 200) {
+                return ['successes' => false, 'title' => 'Error response from server', 'content' => $response->getBody()->getContents()];
+            }
+
+            $responseData = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+            if (isset($responseData['order']) && $responseData['order'] === '406') {
+                return ['successes' => false, 'title' => 'Order has been canceled', 'content' => 'Change link'];
+            }
+
+            if (isset($responseData['data']['Error'])) {
+                return ['successes' => false, 'title' => 'Service error', 'content' => $responseData['data']['Error']];
+            }
+
+            return ['successes' => true, 'data' => $responseData];
+        } catch (\Exception $e) {
+            // Handle the exception as needed
+            return ['successes' => false, 'title' => $e->getMessage(), 'content' => $e->getTraceAsString()];
+        }
     }
 
     /**

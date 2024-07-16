@@ -32,6 +32,11 @@
                                 {{__('Clients and packages')}}
                             </x-nav-link>
                         @break
+                        @case(0)
+                            <x-nav-link :href="route('client.statistic.index')" :active="request()->routeIs('client.statistic.index')">
+                                {{__('Statistics')}}
+                            </x-nav-link>
+                        @break
                     @endswitch
                 </div>
             </div>

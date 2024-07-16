@@ -12,7 +12,7 @@ class NakrutkaOrders extends Model
 
     protected $fillable = [
         'user_id',
-        'user_package_id',
+        'package_id',
         'service',
         'order',
         'quantity',
@@ -36,9 +36,9 @@ class NakrutkaOrders extends Model
     /**
      * @return BelongsTo
      */
-    public function userPackage(): BelongsTo
+    public function package(): BelongsTo
     {
-        return $this->belongsTo(UserPackage::class);
+        return $this->belongsTo(PackageService::class, 'package_id');
     }
 
     /**

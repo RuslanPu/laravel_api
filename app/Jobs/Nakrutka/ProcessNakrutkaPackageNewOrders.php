@@ -83,7 +83,7 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
 
                         NakrutkaOrders::create([
                             'user_id' => $this->userPackage->user_id,
-                            'user_package_id' => $this->userPackage->id,
+                            'package_id' => $this->userPackage->package_id,
                             'service' => $service->id,
                             'order' => $dataOrder['order'],
                             'quantity' => $quantity,
