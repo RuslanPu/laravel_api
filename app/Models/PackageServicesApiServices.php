@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Fields
+ * @property int $id
+ * @property int $package_id
+ * @property int $service_id
+ * @property int $quantity
+ * @property string $comments
+ * @property string $username
+ *
+ * Related
+ * @property ApiService $service
+ * @property PackageService $package
+ */
 class PackageServicesApiServices extends Model
 {
     use HasFactory;

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 class NakrutkaAPI
 {
@@ -53,16 +55,16 @@ class NakrutkaAPI
      * @param string $linkProfile
      * @param string|null $comments
      * @param string|null $loginAuthorComment
-     * @return string
+     * @return array
      * @throws GuzzleException
      */
     public function addOrder(
         string      $service_id,
-        int         $quantity,
+        int|null         $quantity,
         string      $link,
         string|null $comments = null,
         string|null $loginAuthorComment = null
-    ): string
+    ): array
     {
         $action = 'create';
 
@@ -81,8 +83,24 @@ class NakrutkaAPI
 
         $params .= '&link=' . $link;
 
-        $response = $this->client->get($this->fullUrlRequest . $params);
-        return $response->getBody()->getContents();
+        try {
+            $response = $this->client->get($this->fullUrlRequest . $params);
+
+            if ($response->getStatusCode() >= 400) {
+                return ['successes' => false, 'title' => 'Error response from server', 'content' => $response->getBody()->getContents()];
+            }
+
+            $responseData = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+            if (isset($responseData['order']) && $responseData['order'] === '406') {
+                return ['successes' => false, 'title' => 'Order has been canceled', 'content' => 'Change link'];
+            }
+
+            return ['successes' => true, 'data' => $responseData];
+        } catch (\Exception $e) {
+            // Handle the exception as needed
+            return ['successes' => false, 'title' => $e->getMessage(), 'content' => $e->getTraceAsString()];
+        }
     }
 
     /**

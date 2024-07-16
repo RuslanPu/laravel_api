@@ -31,7 +31,15 @@ class ProcessNakrutkaPackage implements ShouldQueue
     public function handle(): void
     {
         try {
-            ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage);
+            if ($this->userPackage->valid) {
+                $nakrutkaAPI = new NakrutkaAPI(new Client());
+
+                $this->userPackage
+                    ->packageServicesApiServices
+                    ?->map(function ($packageServicesApiService) use (&$nakrutkaAPI) {
+                        ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage, $packageServicesApiService, $nakrutkaAPI);
+                    });
+            }
         } catch (\Exception $e) {
             Error::notificate(
                 'ProcessNakrutkaPackage',
