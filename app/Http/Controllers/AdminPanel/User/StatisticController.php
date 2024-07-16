@@ -18,16 +18,16 @@ class StatisticController extends Controller
 
         $data = null;
         $ApiAvailability = false;
-        //if ($orderIDs) {
-        //    $nakrutkaAPI = new NakrutkaAPI(new Client());
-//
-        //    $ordersStatuses = $nakrutkaAPI->statusMultiOrder($orderIDs);
-//
-        //    if ($ordersStatuses['successes']) {
-        //        $data = $ordersStatuses['data'];
-        //        $ApiAvailability = true;
-        //    }
-        //}
+        if ($orderIDs) {
+            $nakrutkaAPI = new NakrutkaAPI(new Client());
+
+            $ordersStatuses = $nakrutkaAPI->statusMultiOrder($orderIDs);
+
+            if ($ordersStatuses['successes']) {
+                $data = $ordersStatuses['data'];
+                $ApiAvailability = true;
+            }
+        }
 
         return view('client.statistic.index', compact('ApiAvailability', 'data'));
     }
