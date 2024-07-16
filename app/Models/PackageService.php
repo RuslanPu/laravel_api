@@ -31,6 +31,7 @@ class PackageService extends Model
     protected $table = 'package_services';
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'active'

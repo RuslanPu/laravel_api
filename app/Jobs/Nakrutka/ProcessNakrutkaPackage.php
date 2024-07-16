@@ -34,12 +34,10 @@ class ProcessNakrutkaPackage implements ShouldQueue
             if ($this->userPackage->package->active
                 && $this->userPackage->valid
             ) {
-                $nakrutkaAPI = new NakrutkaAPI(new Client());
-
                 $this->userPackage
                     ->packageServicesApiServices
                     ?->map(function ($packageServicesApiService) use (&$nakrutkaAPI) {
-                        ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage, $packageServicesApiService, $nakrutkaAPI);
+                        ProcessNakrutkaPackageNewOrders::dispatch($this->userPackage, $packageServicesApiService);
                     });
             }
         } catch (\Exception $e) {

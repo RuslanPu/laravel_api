@@ -175,4 +175,23 @@ class User extends Authenticatable
         return $this->hasMany(NakrutkaOrders::class, 'user_id');
     }
 
+    /**
+     * Get all PackageServicesApiServices for the user through the active packages.
+     *
+     * @return HasManyThrough
+     */
+    public function packageServicesApiServices(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            PackageServicesApiServices::class,  // Конечная модель, которую мы хотим получить
+            UserPackage::class,                 // Промежуточная модель
+            'user_id',                          // Внешний ключ в таблице UserPackage (ссылается на User)
+            'package_id',                       // Внешний ключ в таблице PackageServicesApiServices (ссылается на PackageService)
+            'id',                               // Локальный ключ в таблице User (ссылается на UserPackage)
+            'package_id'                        // Локальный ключ в таблице UserPackage (ссылается на PackageServicesApiServices)
+        )->whereHas('package', function ($query) {
+            $query->where('active', true);
+        });
+    }
+
 }

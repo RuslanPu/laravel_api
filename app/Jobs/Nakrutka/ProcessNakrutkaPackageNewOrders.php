@@ -3,13 +3,13 @@
 namespace App\Jobs\Nakrutka;
 
 use App\Models\ApiServiceCategory;
-use App\Models\ClientOrder;
 use App\Models\NakrutkaOrders;
 use App\Models\PackageServicesApiServices;
 use App\Models\User;
 use App\Models\UserPackage;
 use App\Services\Errors\Error;
 use App\Services\NakrutkaAPI;
+use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,7 +26,6 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
     public function __construct(
         public UserPackage $userPackage,
         public PackageServicesApiServices $packageServicesApiService,
-        public NakrutkaAPI $nakrutkaAPI
     ){
         $this->afterCommit()->onQueue('process-new-order-user-package-' . $this->userPackage->id);
     }
@@ -39,9 +38,12 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
         if ($this->userPackage->package->active
             && $this->userPackage->valid
         ) {
-            $link = '';
+            $nakrutkaAPI = new NakrutkaAPI(new Client());
+
+            $link = null;
             $service = $this->packageServicesApiService->service;
-            switch ($service->type) {
+
+            switch ($service->category) {
                 case ApiServiceCategory::CATEGORY_FOLLOWERS:
                     $link = $this->userPackage->account->account_link;
                     break;
@@ -59,8 +61,8 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
                 $this->packageServicesApiService->service->max,
             );
 
-            $responseData = $this->nakrutkaAPI->addOrder(
-                $this->packageServicesApiService->service_id,
+            $responseData = $nakrutkaAPI->addOrder(
+                $this->packageServicesApiService->service->service,
                 $quantity,
                 $link,
                 $this->packageServicesApiService->comments,
@@ -69,9 +71,10 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
 
             if ($responseData['successes']) {
                 $dataOrder = $responseData['data'];
+
                 NakrutkaOrders::create([
                     'user_id' => $this->userPackage->user_id,
-                    'user_package_id' => $this->userPackage->package_id,
+                    'user_package_id' => $this->userPackage->id,
                     'service' => $service->id,
                     'order' => $dataOrder['order'],
                     'quantity' => $quantity,
@@ -93,16 +96,16 @@ class ProcessNakrutkaPackageNewOrders implements ShouldQueue
             }
         }
 
-        try {
-
-        } catch (\Exception $e) {
-            Error::notificate(
-                'ProcessNakrutkaPackageNewOrders',
-                $e->getMessage(),
-                $e->getTraceAsString(),
-                User::Admin()->email,
-            );
-        }
+        //try {
+//
+        //} catch (\Exception $e) {
+        //    Error::notificate(
+        //        'ProcessNakrutkaPackageNewOrders',
+        //        $e->getMessage(),
+        //        $e->getTraceAsString(),
+        //        User::Admin()->email,
+        //    );
+        //}
     }
 
 

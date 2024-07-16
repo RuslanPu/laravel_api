@@ -62,28 +62,46 @@
 
                                 <h6>Packages</h6>
                                 <div class="m-3 flex-grow-1">
-
                                     @foreach($client->activeClientPackages as $clientPackage)
-                                        <div class="mb-2 badge bg-gray-100  dark:bg-gray-900 text-start p-3">
-                                            <p class="mb-3"><strong>Name:</strong> {{ $clientPackage->package->name }}</p>
+                                        <div class="mb-2 badge bg-gray-100 dark:bg-gray-900 text-center p-3 w-25">
+                                            <div class="w-100 text-start">
+                                                <div>
+                                                    <h6>Package:</h6>
+                                                    <p class="mb-3 w-100 text-wrap"><strong>ID:</strong> {{ $clientPackage->id }}</p>
+                                                    <p class="mb-3 w-100 text-wrap"><strong>Name:</strong> {{ $clientPackage->package->name }}</p>
+                                                </div>
 
+                                                <hr>
+
+                                                <div>
+                                                    <h6>Serveces:</h6>
+                                                    @foreach($clientPackage->packageServicesApiServices as $clientService)
+                                                        <div class="border-1 p-1 m-1 rounded-[10px]">
+                                                            <p class="mb-3 w-100 text-wrap"><strong>ID:</strong> {{ $clientService->id }}</p>
+                                                            <p class="mb-3 w-100 text-wrap"><strong>Name:</strong> {{ $clientService->service->name }}</p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                             @if($clientPackage->valid)
                                                 <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/stop' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
-                                                @csrf
+                                                    @csrf
                                                     @method('PUT')
-                                                <button type="submit" class="m-1 btn btn-success">Stop</button>
-                                            </form>
+                                                     <button type="submit" class="w-50 m-1 btn btn-danger">Stop</button>
+                                                </form>
                                             @else
-                                            <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/start' }}" method="POST" onsubmit="return confirm('Are you sure you want to start this package for client?');">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="m-1 btn btn-success">Start</button>
-                                            </form>
+                                                 <form action="{{ url('manager/client/package/' . $clientPackage->id) . '/start' }}"
+                                                       class="flex-column"
+                                                       method="POST"
+                                                       onsubmit="return confirm('Are you sure you want to start this package for client?');">
+                                                 @csrf
+                                                 @method('PUT')
+                                                     <button type="submit" class="w-50 m-1 justify-center btn btn-success">Start</button>
+                                                 </form>
                                             @endif
                                         </div>
                                     @endforeach
                                 </div>
-
                                 @if($can)
                                     <div class="d-flex justify-content-end">
 

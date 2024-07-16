@@ -59,49 +59,57 @@ class NakrutkaAPI
      * @throws GuzzleException
      */
     public function addOrder(
-        string      $service_id,
-        int|null         $quantity,
-        string      $link,
+        string $service_id,
+        int|null $quantity,
+        string $link,
         string|null $comments = null,
         string|null $loginAuthorComment = null
-    ): array
-    {
-        $action = 'create';
+    ): array {
+        if ($link) {
+            try {
+                $action = 'create';
 
-        $params = '&action=' . $action . '&service=' . $service_id;
-        if ($quantity) {
-            $params .= '&quantity=' . $quantity;
-        }
+                $params = '&action=' . $action . '&service=' . $service_id;
+                if ($quantity) {
+                    $params .= '&quantity=' . $quantity;
+                }
 
-        if ($comments) {
-            $params .= '&comments=' . $comments;
-        }
+                if ($comments) {
+                    $params .= '&comments=' . $comments;
+                }
 
-        if ($loginAuthorComment) {
-            $params .= '&username=' . $comments;
-        }
+                if ($loginAuthorComment) {
+                    $params .= '&username=' . $comments;
+                }
 
-        $params .= '&link=' . $link;
+                $params .= '&link=' . $link;
 
-        try {
-            $response = $this->client->get($this->fullUrlRequest . $params);
+                $response = $this->client->get($this->fullUrlRequest . $params);
 
-            if ($response->getStatusCode() >= 400) {
-                return ['successes' => false, 'title' => 'Error response from server', 'content' => $response->getBody()->getContents()];
+                if ($response->getStatusCode() !== 200) {
+                    return ['successes' => false, 'title' => 'Error response from server', 'content' => $response->getBody()->getContents()];
+                }
+
+                $responseData = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+                if (isset($responseData['order']) && $responseData['order'] === '406') {
+                    return ['successes' => false, 'title' => 'Order has been canceled', 'content' => 'Change link'];
+                }
+
+                if (isset($responseData['data']['Error'])) {
+                    return ['successes' => false, 'title' => 'Service error', 'content' => $responseData['data']['Error']];
+                }
+
+                return ['successes' => true, 'data' => $responseData];
+            } catch (\Exception $e) {
+                // Handle the exception as needed
+                return ['successes' => false, 'title' => $e->getMessage(), 'content' => $e->getTraceAsString()];
             }
-
-            $responseData = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-
-            if (isset($responseData['order']) && $responseData['order'] === '406') {
-                return ['successes' => false, 'title' => 'Order has been canceled', 'content' => 'Change link'];
-            }
-
-            return ['successes' => true, 'data' => $responseData];
-        } catch (\Exception $e) {
-            // Handle the exception as needed
-            return ['successes' => false, 'title' => $e->getMessage(), 'content' => $e->getTraceAsString()];
+        } else {
+            return ['successes' => false, 'title' => 'Error no link', 'content' => 'No link'];
         }
     }
+
 
     /**
      * @param $orderID

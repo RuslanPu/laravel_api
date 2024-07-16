@@ -68,12 +68,4 @@ class ApiService extends Model
         return $this->belongsTo(ApiServiceCategory::class, 'category', 'id');
     }
 
-    /**
-     * @return BelongsTo
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(ApiServiceCategory::class, 'category');
-    }
-
 }

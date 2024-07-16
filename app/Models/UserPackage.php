@@ -65,9 +65,16 @@ class UserPackage extends Model
      *
      * @return HasManyThrough
      */
-    public function services(): HasManyThrough
+    public function packageServicesApiServices(): HasManyThrough
     {
-        return $this->hasManyThrough(ApiService::class, PackageService::class, 'id', 'package_id', 'package_id', 'id');
+        return $this->hasManyThrough(
+            PackageServicesApiServices::class,   // Конечная модель, которую мы хотим получить
+            PackageService::class,               // Промежуточная модель
+            'id',                                // Внешний ключ в таблице PackageService (локальный ключ в промежуточной модели)
+            'package_id',                        // Внешний ключ в таблице PackageServicesApiServices (локальный ключ в конечной модели)
+            'package_id',                        // Локальный ключ в таблице UserPackage (локальный ключ в начальной модели)
+            'id'                                 // Локальный ключ в таблице PackageService (внешний ключ в промежуточной модели)
+        )->where('package_services.active', true);
     }
 
     /**
@@ -75,7 +82,7 @@ class UserPackage extends Model
      *
      * @return HasManyThrough
      */
-    public function packageServicesApiServices(): HasManyThrough
+    public function apiServices(): HasManyThrough
     {
         return $this->hasManyThrough(
             ApiService::class,
