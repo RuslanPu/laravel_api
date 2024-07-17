@@ -31,7 +31,6 @@ class NakrutkaPackagesController extends Controller
     public function create(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
         $services = ApiService::query()
-            ->where('active' , true)
             ->with('serviceCategory')->get();
 
         $servicesByCategory = $services->groupBy(function ($service) {

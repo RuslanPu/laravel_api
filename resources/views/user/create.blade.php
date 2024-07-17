@@ -27,7 +27,7 @@
                         <mb-3>
                             <label for="type" class="form-label">Type users</label>
                             <select class="form-select" name="type">
-                                <option value="0">Client</option>
+                                <!--<option value="0">Client</option>-->
                                 <option value="1">Manager</option>
                                 <option value="2">Admin</option>
                             </select>

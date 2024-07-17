@@ -16,22 +16,22 @@
                             <thead>
                             <tr>
                                 <th scope="col">Order ID</th>
-                                <th scope="col">Charge</th>
+                                <!-- <th scope="col">Charge</th> -->
                                 <th scope="col">Remains</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Start Count</th>
-                                <th scope="col">Currency</th>
+                                <!-- <th scope="col">Currency</th> -->
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($data as $orderId => $order)
                                 <tr>
                                     <th scope="row">{{ $orderId }}</th>
-                                    <td>{{ $order['charge'] }}</td>
+                                    <!-- <td>{{ $order['charge'] }}</td> -->
                                     <td>{{ $order['remains'] }}</td>
                                     <td>{{ $order['status'] }}</td>
                                     <td>{{ $order['start_count'] }}</td>
-                                    <td>{{ $order['currency'] }}</td>
+                                    <!-- <td>{{ $order['currency'] }}</td> -->
                                 </tr>
                             @endforeach
                             </tbody>

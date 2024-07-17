@@ -41,6 +41,7 @@
                             </select>
                         </div>
 
+                        <hr>
                         <h3>Services</h3>
                         <div id="service-form-group">
                             <div class="mb-3">
@@ -62,7 +63,7 @@
 
                             <div id="service-fields"></div>
 
-                            <button type="button" class="btn btn-secondary" onclick="addService()">Add Service</button>
+                            <button type="button" class="btn btn-success" onclick="addService()">Add Service</button>
                         </div>
 
                         <div id="services-container" class="mt-4">

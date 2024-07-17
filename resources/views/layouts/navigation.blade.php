@@ -15,7 +15,7 @@
                     @switch(Auth::user()?->type)
                         @case(2)
                             <x-nav-link :href="route('adminDashboardShow')" :active="request()->routeIs('adminDashboardShow')">
-                                {{__('Main')}}
+                                {{__('Users')}}
                             </x-nav-link>
                             <x-nav-link :href="route('packages.list')" :active="request()->routeIs('packages.list')">
                                 {{__('Packages')}}
