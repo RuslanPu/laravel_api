@@ -1,16 +1,19 @@
 <?php
 
-use App\Console\Commands\FetchBalanceCommand;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Schedule;
 
-//Commands
-Schedule::command('fetch:balance')->everyMinute();
-Schedule::command('sync:services')->daily();
+/*
+|--------------------------------------------------------------------------
+| Console Routes
+|--------------------------------------------------------------------------
+|
+| This file is where you may define all of your Closure based console
+| commands. Each Closure is bound to a command instance allowing a
+| simple approach to interacting with each command's IO methods.
+|
+*/
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
-
-
+})->purpose('Display an inspiring quote');
