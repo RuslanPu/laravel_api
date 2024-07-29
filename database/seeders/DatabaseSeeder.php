@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            SocialAccountTypeSeeder::class
+            SocialAccountTypeSeeder::class,
+            ApiServiceCategorySeeder::class
         ]);
 
         PackageService::factory(3)->create(); //Создаем пакеты
